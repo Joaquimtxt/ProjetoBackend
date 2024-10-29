@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ProjetoBackend</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="~/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ProjetoBackend.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm custom-bg border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand text-light" asp-area="" asp-controller="Home" asp-action="Index">DbJaketa</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Sobre">Sobre Nós</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Servicos" asp-action="Index">Servicos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Clientes" asp-action="Index">Clientes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Vendas" asp-action="Index">Vendas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Fornecedores" asp-action="Index">Fornecedores</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Compras" asp-action="Index">Compras</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Categorias" asp-action="Index">Categorias de Produtos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Produtos" asp-action="Index">Produtos</a>
+                        </li>
+
+
+                    </ul>
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="row m-0">
+
+            <div class="text-light col-md-2">
+                &copy; 2024 - DbJaketa
+            </div>
+            <div class="text-light mt-2 col-md-8 text-end ">
+                <a href="https://www.facebook.com/jaketamoveis/?locale=pt_BR" target="_blank" rel="noopener noreferrer">
+                    <ion-icon name="logo-facebook" class="custom-icon me-4"></ion-icon>
+                </a>
+            </div>
+            <div class="text-light mt-2 col-md">
+                <ion-icon name="logo-instagram" class="custom-icon me-4"></ion-icon>
+            </div>
+        </div>
+        <div class="row m-0">
+            <div class="text-light col-md-10 text-end">
+                <ion-icon name="logo-whatsapp" class="me-10"></ion-icon>
+                (14) 99791-3594
+            </div>
+            <div class="text-light col-md">
+                <ion-icon name="call-outline" class="me-10"></ion-icon>
+                (14) 3418-5688
+            </div>
+
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/ionicons/ionicons.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
