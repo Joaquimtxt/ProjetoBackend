@@ -18,15 +18,119 @@ html {
 }
 
 body {
-    margin-bottom: 60px;
+    margin-bottom: 250px;
     background-color: #1E1D27;
 }
 
+
 .custom-icon {
-    width: 43px;
+    width: 43px; /* Ajuste o tamanho conforme necessário */
     height: 36px;
+    position: relative;
+    transition: transform 0.3s ease;
 }
+
+    .custom-icon:hover {
+        transform: scale(1.2); /* Aumenta o ícone para dar um efeito de destaque */
+    }
+
+    .custom-icon::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background-color: rgba(128, 128, 128, 0.3); /* Cor cinza com transparência */
+        border-radius: 50%;
+        transition: width 0.3s ease, height 0.3s ease, top 0.3s ease, left 0.3s ease;
+        z-index: -1; /* Coloca o círculo atrás do ícone */
+    }
+
+    .custom-icon:hover::before {
+        width: 50px; /* Ajuste o tamanho do círculo conforme necessário */
+        height: 50px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
 
 .custom-bg {
     background-color: #1E1D27;
+}
+
+.custom-link {
+    position: relative;
+    padding-bottom: 5px; /* Espaço para a linha */
+}
+
+    .custom-link.active::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 2px; /* Espessura da linha */
+        background-color: #E6B32F; /* Cor da linha */
+    }
+
+/*Hover da navbar*/
+.nav-item .nav-link {
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+    .nav-item .nav-link::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 3px;
+        background-color: transparent;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+        transform: scaleX(0);
+        transform-origin: bottom right;
+    }
+
+    .nav-item .nav-link.active::after {
+        background-color: #E6b32F;
+        transform: scaleX(1);
+        transform-origin: bottom left;
+    }
+
+    .nav-item .nav-link:hover::after {
+        background-color: #E6B32F;
+        transform: scaleX(1);
+        transform-origin: bottom left;
+    }
+
+    .nav-item .nav-link:hover.active::after {
+        background-color: transparent;
+        transform: scaleX(0);
+    }
+
+/*Style para o footer, para grudar os itens*/
+.custom-txt-footer {
+    line-height: 1.2; /* Ajuste a altura da linha para reduzir o espaçamento vertical */
+}
+
+/*Fazendo o texto aparecer em um bloco amarelo sobre a imagem*/
+.text-overlay {
+    position: absolute;
+    bottom: 0;
+    right: 12px;
+    background-color: #E6B32F;
+    color: black;
+    padding: 5px 10px;
+    margin: 0;
+    font-size: 1.5rem;
+    border-radius: 0;
+}
+
+/*Ajeitando as imagens que não batem o tamanho*/
+.fixed-size {
+    width: 300px;
+    height: 300px;
+    object-fit: cover; /* Mantém a proporção da imagem e preenche o contêiner */
 }

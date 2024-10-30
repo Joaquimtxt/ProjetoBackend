@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ProjetoBackend.styles.css" asp-append-version="true" />
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm custom-bg border-bottom box-shadow mb-3">
             <div class="container-fluid">
@@ -21,22 +21,23 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Sobre">Sobre Nós</a>
+                            <a class="nav-link text-light custom-link @(ViewContext.RouteData.Values["action"].ToString() == "Sobre" ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Sobre">Sobre Nós</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Servicos" asp-action="Index">Servicos</a>
+                            <a class="nav-link text-light custom-link @(ViewContext.RouteData.Values["action"].ToString() == "Index" && ViewContext.RouteData.Values["controller"].ToString() == "Servicos" ? "active" : "")" asp-area="" asp-controller="Servicos" asp-action="Index">Serviços</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Clientes" asp-action="Index">Clientes</a>
+                            <a class="nav-link text-light custom-link @(ViewContext.RouteData.Values["action"].ToString() == "Index" && ViewContext.RouteData.Values["controller"].ToString() == "Clientes" ? "active" : "")" asp-area="" asp-controller="Clientes" asp-action="Index">Clientes</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-light custom-link @(ViewContext.RouteData.Values["action"].ToString() == "Index" && ViewContext.RouteData.Values["controller"].ToString() == "Vendas" ? "active" : "")" asp-area="" asp-controller="Vendas" asp-action="Index">Vendas</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Vendas" asp-action="Index">Vendas</a>
+                            <a class="nav-link text-light custom-link @(ViewContext.RouteData.Values["action"].ToString() == "Index" && ViewContext.RouteData.Values["controller"].ToString() == "Fornecedores" ? "active" : "")" asp-area="" asp-controller="Fornecedores" asp-action="Index">Fornecedores</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Fornecedores" asp-action="Index">Fornecedores</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Compras" asp-action="Index">Compras</a>
+                            <a class="nav-link text-light custom-link @(ViewContext.RouteData.Values["action"].ToString() == "Index" && ViewContext.RouteData.Values["controller"].ToString() == "Compras" ? "active" : "")" asp-area="" asp-controller="Compras" asp-action="Index">Compras</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Categorias" asp-action="Index">Categorias de Produtos</a>
@@ -47,42 +48,58 @@
 
 
                     </ul>
+
                     <partial name="_LoginPartial" />
+
+
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container flex-grow-1">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
-
-    <footer class="border-top footer text-muted">
+    <footer class="border-top footer text-muted mt-auto">
         <div class="row m-0">
-
             <div class="text-light col-md-2">
                 &copy; 2024 - DbJaketa
             </div>
-            <div class="text-light mt-2 col-md-8 text-end ">
-                <a href="https://www.facebook.com/jaketamoveis/?locale=pt_BR" target="_blank" rel="noopener noreferrer">
+            <div class="text-light mt-2 col-md-9 text-end">
+                <a href="https://www.facebook.com/jaketamoveis/?locale=pt_BR" target="_blank" rel="noopener noreferrer" class="link link-light">
                     <ion-icon name="logo-facebook" class="custom-icon me-4"></ion-icon>
                 </a>
             </div>
             <div class="text-light mt-2 col-md">
-                <ion-icon name="logo-instagram" class="custom-icon me-4"></ion-icon>
+                <a href="https://www.instagram.com/jaketamoveisoficial/?hl=pt" target="_blank" rel="noopener noreferrer" class="link link-light">
+                    <ion-icon name="logo-instagram" class="custom-icon me-4"></ion-icon>
+                </a>
             </div>
         </div>
         <div class="row m-0">
-            <div class="text-light col-md-10 text-end">
-                <ion-icon name="logo-whatsapp" class="me-10"></ion-icon>
-                (14) 99791-3594
+            <div class="text-light col-md-11 text-end custom-txt-footer">
+                <a href="https://api.whatsapp.com/send?phone=5514997913594&text= Gostaria de saber mais sobre" target="_blank" rel="noopener noreferrer" class="link link-light text-decoration-none">
+                    <ion-icon name="logo-whatsapp" class="me-10"></ion-icon>
+                    (14) 99791-3594
+                </a>
             </div>
-            <div class="text-light col-md">
+            <div class="text-light col-md custom-txt-footer">
                 <ion-icon name="call-outline" class="me-10"></ion-icon>
                 (14) 3418-5688
             </div>
-
+        </div>
+        <div class="row m-0">
+            <div class="text-light col-md-12 text-end custom-txt-footer">
+                <p class="me-4"> jaketamoveis@jaketamoveis.com.br </p>
+            </div>
+        </div>
+        <div class="row m-0 mb-5">
+            <div class="text-light col-md-12 text-end custom-txt-footer mb-0">
+                <ion-icon name="location-outline"></ion-icon>
+                Rua Visconde do Rio Branco, 141 - Centro – Jaú
+                <span class="d-block mt-0">Esquina com 13 de maio</span>
+            </div>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
