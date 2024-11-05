@@ -59,55 +59,20 @@ body {
     background-color: #1E1D27;
 }
 
+/*Hover da navbar*/
 .custom-link {
     position: relative;
-    padding-bottom: 5px; /* Espaço para a linha */
+    padding-bottom: 5px; /* Ajuste conforme necessário */
 }
 
     .custom-link.active::after {
         content: '';
         position: absolute;
-        left: 0;
         bottom: 0;
-        width: 100%;
-        height: 2px; /* Espessura da linha */
-        background-color: #E6B32F; /* Cor da linha */
-    }
-
-/*Hover da navbar*/
-.nav-item .nav-link {
-    position: relative;
-    transition: color 0.3s ease;
-}
-
-    .nav-item .nav-link::after {
-        content: '';
-        position: absolute;
         left: 0;
-        bottom: 0;
         width: 100%;
-        height: 3px;
-        background-color: transparent;
-        transition: background-color 0.3s ease, transform 0.3s ease;
-        transform: scaleX(0);
-        transform-origin: bottom right;
-    }
-
-    .nav-item .nav-link.active::after {
-        background-color: #E6b32F;
-        transform: scaleX(1);
-        transform-origin: bottom left;
-    }
-
-    .nav-item .nav-link:hover::after {
-        background-color: #E6B32F;
-        transform: scaleX(1);
-        transform-origin: bottom left;
-    }
-
-    .nav-item .nav-link:hover.active::after {
-        background-color: transparent;
-        transform: scaleX(0);
+        height: 3px; /* Espessura da barra */
+        background-color: #E6B32F; /* Cor da barra*/
     }
 
 /*Style para o footer, para grudar os itens*/
@@ -130,7 +95,84 @@ body {
 
 /*Ajeitando as imagens que não batem o tamanho*/
 .fixed-size {
-    width: 300px;
+    width: 500px;
     height: 300px;
     object-fit: cover; /* Mantém a proporção da imagem e preenche o contêiner */
+    /*Colocando um tamanho para fonte*/
+}
+
+/*Ajeitando as imagens do sobre nós*/
+.sobrenos {
+    width: 320px;
+    height: 320px;
+    object-fit: cover;
+}
+
+/*Texto do sobre nós*/
+.font-size {
+    font-size: 35px;
+}
+
+/*Links do login com Hover*/
+.link-hover {
+    position: relative;
+    display: inline-block;
+    padding: 5px 10px; /* Ajuste o padding conforme necessário */
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border-radius: 8px; /* Arredondamento das bordas */
+}
+
+    .link-hover:hover {
+        background-color: rgba(255, 255, 255, 0.1); /* Cor de fundo no hover */
+        color: #fff; /* Cor do texto no hover */
+        text-decoration: none; /* Remove o sublinhado no hover */
+    }
+
+/*Colocando cor no botão*/
+.search-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.search-input {
+    margin-right: -2px;
+    padding: 10px;
+    border: 2px solid #D9D9D9;
+    border-radius: 15px 0 0 15px;
+    font-size: 16px;
+    outline: none;
+    height: 40px;
+}
+
+.search-button {
+    background-color: #E6B32F;
+    border: none;
+    color: black;
+    padding: 0 15px;
+    border-radius: 0 15px 15px 0;
+    border-left: none;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    height: 40px;
+}
+
+    .search-button ion-icon {
+        color: black;
+        font-size: 20px;
+    }
+
+.btn-adicionar {
+    background-color: #E6B32F;
+    border: none;
+    color: black;
+    padding: 0 15px;
+    border-radius: 15px 15px 15px 15px;
+    border-left: none;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    height: 40px;
 }

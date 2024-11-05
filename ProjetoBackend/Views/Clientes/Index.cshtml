@@ -4,73 +4,55 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
 
-<form asp-action="Search" method="get">
-  <input type="text" name="nome" placeholder="Buscar cliente por nome..." />
-    <button type="submit"><ion-icon name="search"></ion-icon>Buscar</button>
-</form>
+<h1 class="text-light text-center">Clientes:</h1>
+<hr />
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <a asp-action="Create" class="btn text-black btn-adicionar">Adicionar</a>
+        </div>
+        <div class="search-container">
+            <form asp-action="Search" method="get" class="d-flex">
+                <input class="search-input" type="text" name="nome" placeholder="Procurar..." />
+                <button type="submit" class="btn search-button"><ion-icon name="search"></ion-icon></button>
+            </form>
+        </div>
+    </div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nome)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CnpjCpf)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Celular)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DataNascimento)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DataCadastro)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CadastroAtivo)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CnpjCpf)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Celular)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataNascimento)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataCadastro)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CadastroAtivo)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ClienteId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ClienteId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ClienteId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Nome)</th>
+                    <th>@Html.DisplayNameFor(model => model.Email)</th>
+                    <th>@Html.DisplayNameFor(model => model.CnpjCpf)</th>
+                    <th>@Html.DisplayNameFor(model => model.Celular)</th>
+                    <th>@Html.DisplayNameFor(model => model.DataNascimento)</th>
+                    <th>@Html.DisplayNameFor(model => model.DataCadastro)</th>
+                    <th>@Html.DisplayNameFor(model => model.CadastroAtivo)</th>
+                    <th>Editar</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Nome)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                        <td>@Html.DisplayFor(modelItem => item.CnpjCpf)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Celular)</td>
+                        <td>@Html.DisplayFor(modelItem => item.DataNascimento)</td>
+                        <td>@Html.DisplayFor(modelItem => item.DataCadastro)</td>
+                        <td>@Html.DisplayFor(modelItem => item.CadastroAtivo)</td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.ClienteId">Edit</a> |
+                            <a asp-action="Details" asp-route-id="@item.ClienteId">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.ClienteId">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
