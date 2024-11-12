@@ -11,3 +11,5 @@ navLinks.forEach(link => {
         link.classList.remove('active');
     }
 });
+
+

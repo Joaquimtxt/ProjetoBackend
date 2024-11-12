@@ -176,3 +176,13 @@ body {
     cursor: pointer;
     height: 40px;
 }
+
+/*Fazendo o Dropdown passar da tabela*/
+.table-responsive {
+    overflow: visible; /* Permite que o dropdown ultrapasse os limites da tabela */
+}
+
+.dropdown-menu {
+    position: absolute; /* Garante que o dropdown não seja restrito pela célula da tabela */
+    will-change: transform; /* Melhora o desempenho do dropdown */
+}
