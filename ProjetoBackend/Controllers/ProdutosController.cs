@@ -22,8 +22,8 @@ namespace ProjetoBackend.Controllers
         // GET: Produtos
         public async Task<IActionResult> Index()
         {
-            var produtos = await _context.Produtos.ToListAsync();
-            return View(produtos.OrderBy(p => p.Nome));
+            var applicationDbContext = _context.Produtos.Include(p => p.Categoria);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Produtos/Details/5
@@ -57,7 +57,7 @@ namespace ProjetoBackend.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProdutoId,Nome,Preco,Estoque,CategoriaId")] Produto produto)
+        public async Task<IActionResult> Create([Bind("ProdutoId,Nome,CodigoProduto,Preco,Estoque,tipoProduto,CategoriaId")] Produto produto)
         {
             if (ModelState.IsValid)
             {
@@ -92,7 +92,7 @@ namespace ProjetoBackend.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("ProdutoId,Nome,Preco,Estoque,CategoriaId")] Produto produto)
+        public async Task<IActionResult> Edit(Guid id, [Bind("ProdutoId,Nome,CodigoProduto,Preco,Estoque,tipoProduto,CategoriaId")] Produto produto)
         {
             if (id != produto.ProdutoId)
             {
@@ -122,6 +122,7 @@ namespace ProjetoBackend.Controllers
             ViewData["CategoriaId"] = new SelectList(_context.Categorias, "CategoriaId", "Nome", produto.CategoriaId);
             return View(produto);
         }
+
 
         // GET: Produtos/Delete/5
         public async Task<IActionResult> Delete(Guid? id)

@@ -26,7 +26,6 @@ body {
 .custom-icon {
     width: 43px; /* Ajuste o tamanho conforme necessário */
     height: 36px;
-    position: relative;
     transition: transform 0.3s ease;
 }
 
@@ -35,12 +34,12 @@ body {
     }
 
     .custom-icon::before {
-        content: '';
+        /*        content: '';
         position: absolute;
         top: 50%;
         left: 50%;
         width: 0;
-        height: 0;
+        height: 0;*/
         background-color: rgba(128, 128, 128, 0.3); /* Cor cinza com transparência */
         border-radius: 50%;
         transition: width 0.3s ease, height 0.3s ease, top 0.3s ease, left 0.3s ease;
@@ -77,7 +76,7 @@ body {
 
 /*Style para o footer, para grudar os itens*/
 .custom-txt-footer {
-    line-height: 1.2; /* Ajuste a altura da linha para reduzir o espaçamento vertical */
+    line-height: 1; /* Ajuste a altura da linha para reduzir o espaçamento vertical */
 }
 
 /*Fazendo o texto aparecer em um bloco amarelo sobre a imagem*/
@@ -185,4 +184,9 @@ body {
 .dropdown-menu {
     position: absolute; /* Garante que o dropdown não seja restrito pela célula da tabela */
     will-change: transform; /* Melhora o desempenho do dropdown */
+}
+
+
+footer {
+    line-height: 20px !important;
 }

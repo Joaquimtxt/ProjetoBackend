@@ -13,3 +13,27 @@ navLinks.forEach(link => {
 });
 
 
+// Get a reference to the hidden input and select elements
+const hiddenInput = document.getElementById('cadAtivo');
+const selectElement = document.getElementById('CadastroAtivo');
+
+// Function to update the select element based on the hidden input value
+function updateSelect() {
+    const hiddenValue = hiddenInput.value;
+
+    // Select the appropriate option based on the hidden value
+    if (hiddenValue === 'True') {
+        selectElement.value = 'True';
+    } else {
+        selectElement.value = 'False';
+    }
+}
+
+
+function onChangeSelect() {
+    hiddenInput.value = selectElement.value;
+}
+
+
+// Call the update function when the page loads
+window.onload = updateSelect;

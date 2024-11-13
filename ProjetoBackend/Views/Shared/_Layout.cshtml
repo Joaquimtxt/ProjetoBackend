@@ -10,15 +10,15 @@
     <link rel="stylesheet" href="~/ProjetoBackend.styles.css" asp-append-version="true" />
 </head>
 <body class="d-flex flex-column min-vh-100">
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm custom-bg border-bottom box-shadow mb-3">
+    <header class="custom-bg">
+        <nav class="navbar navbar-expand-xl navbar-toggleable-xl  navbar-dark border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand text-light" asp-area="" asp-controller="Home" asp-action="Index">DbJaketa</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <div class="navbar-collapse collapse d-xl-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item custom-link">
                             <a class="nav-link text-light fw-bold custom-link" asp-area="" asp-controller="Home" asp-action="Index">Pagina Inicial</a>
@@ -27,7 +27,7 @@
                             <a class="nav-link text-light fw-bold custom-link" asp-area="" asp-controller="Home" asp-action="Sobre">Sobre Nós</a>
                         </li>
                         <li class="nav-item custom-link">
-                            <a class="nav-link text-light fw-bold custom-link" asp-area="" asp-controller="Servicos" asp-action="Index">Servicos</a>
+                            <a class="nav-link text-light fw-bold custom-link" asp-area="" asp-controller="Servicos" asp-action="Index">Serviços</a>
                         </li>
                         <li class="nav-item custom-link">
                             <a class="nav-link text-light fw-bold custom-link" asp-area="" asp-controller="Clientes" asp-action="Index">Clientes</a>
@@ -65,44 +65,51 @@
         </main>
     </div>
     <footer class="border-top footer text-muted mt-auto">
+
         <div class="row m-0">
-            <div class="text-light col-md-2">
+            <div class="col-12 col-xl-4 text-light text-center text-xl-start ms-0 mb-2 mb-xl-0  ms-xl-4 pt-2">
                 &copy; 2024 - DbJaketa
             </div>
-            <div class="text-light mt-2 col-md-9 text-end">
-                <a href="https://www.facebook.com/jaketamoveis/?locale=pt_BR" target="_blank" rel="noopener noreferrer" class="link link-light">
-                    <ion-icon name="logo-facebook" class="custom-icon me-4"></ion-icon>
-                </a>
+
+            <div class="col-12 col-xl">
+                <div id="iconesFooter" class="text-light pt-3 mb-4 pe-0 pe-xl-5 text-center text-xl-end">
+                    <a href="https://www.facebook.com/jaketamoveis/?locale=pt_BR" target="_blank" class=" text-light text-decoration-none">
+                        <ion-icon name="logo-facebook" class="custom-icon me-0 me-xl-4"></ion-icon>
+                    </a>
+                    <a href="https://www.instagram.com/jaketamoveisoficial/?hl=pt" target="_blank" class=" text-light text-decoration-none">
+                        <ion-icon name="logo-instagram" class="custom-icon me-0 me-xl-4"></ion-icon>
+                    </a>
+                </div>
+
+                <div id="" class="text-light pe-0 pe-xl-5 text-center text-xl-end mb-3">
+                    <span class="text-light text-end custom-txt-footer me-0 me-xl-4">
+                        <a href="https://api.whatsapp.com/send?phone=5514997913594&text= Gostaria de saber mais sobre" target="_blank" rel="noopener noreferrer" class="link link-light text-decoration-none">
+                            <ion-icon name="logo-whatsapp" class="me-1 pt-2"></ion-icon>
+                            <span class="mb-3">(14) 99791-3594</span>
+                        </a>
+                    </span>
+
+                    <span class="text-light custom-txt-footer me-0 me-xl-4">
+                        <ion-icon name="call-outline" class="me-1 pt-2"></ion-icon>
+                        <a href="callto:+551434185688" class="text-light text-decoration-none text-end">
+                            <span class="pb-3">(14) 3418-5688</span>
+                        </a>
+                    </span>
+                </div>
+
+                <div id="" class="text-light pe-0 pe-xl-5 text-center text-xl-end me-0 me-xl-4 mb-3">
+                    <a class="text-light text-decoration-none text-end" href="mailto:jaketamoveis@jaketamoveis.com.br">jaketamoveis@jaketamoveis.com.br</a>
+                </div>
+
+
+                <div id="" class="text-light pe-0 pe-xl-5 text-center text-xl-end me-0 me-xl-4 mb-3">
+                    <p class="m-0"> <ion-icon name="location-outline"></ion-icon> Rua Visconde do Rio Branco, 141</p>
+                    <p class="m-0">Centro – Jaú | Esquina com 13 de maio</p>
+                </div>
+
             </div>
-            <div class="text-light mt-2 col-md">
-                <a href="https://www.instagram.com/jaketamoveisoficial/?hl=pt" target="_blank" rel="noopener noreferrer" class="link link-light">
-                    <ion-icon name="logo-instagram" class="custom-icon me-4"></ion-icon>
-                </a>
-            </div>
-        </div>
-        <div class="row m-0">
-            <div class="text-light col-md-11 text-end custom-txt-footer">
-                <a href="https://api.whatsapp.com/send?phone=5514997913594&text= Gostaria de saber mais sobre" target="_blank" rel="noopener noreferrer" class="link link-light text-decoration-none">
-                    <ion-icon name="logo-whatsapp" class="me-10"></ion-icon>
-                    (14) 99791-3594
-                </a>
-            </div>
-            <div class="text-light col-md custom-txt-footer">
-                <ion-icon name="call-outline" class="me-10"></ion-icon>
-                (14) 3418-5688
-            </div>
-        </div>
-        <div class="row m-0">
-            <div class="text-light col-md-12 text-end custom-txt-footer">
-                <p class="me-4"> jaketamoveis@jaketamoveis.com.br </p>
-            </div>
-        </div>
-        <div class="row m-0 mb-5">
-            <div class="text-light col-md-12 text-end custom-txt-footer mb-0">
-                <ion-icon name="location-outline"></ion-icon>
-                Rua Visconde do Rio Branco, 141 - Centro – Jaú
-                <span class="d-block mt-0">Esquina com 13 de maio</span>
-            </div>
+
+
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

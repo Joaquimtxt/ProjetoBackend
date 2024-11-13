@@ -7,12 +7,18 @@ namespace ProjetoBackend.Models
         public Guid ProdutoId { get; set; }
         [Required(ErrorMessage = "O Campo Nome do Produto é Obrigatório!")]
         public string Nome { get; set; }
+        [Required(ErrorMessage = "O Campo Código é Obrigatório")]
+        [Display(Name = "Código do Produto")]
+        public string CodigoProduto { get; set; }
         [Required(ErrorMessage = "O Campo Preço do Produto é Obrigatório!")]
         [Display(Name = "Preço")]
         public double Preco { get; set; }
         [Display(Name = "Estoque")]
         [Required(ErrorMessage = "O Campo Estoque do Produto é Obrigatório!")]
         public double Estoque { get; set; }
+        [Display(Name = "Produto")]
+        [Required(ErrorMessage = "Selecione um tipo!")]
+        public string tipoProduto { get; set; }
 
         /** Relacionamento entre tabelas **/
         /* Chave Estrangeria */
@@ -21,6 +27,7 @@ namespace ProjetoBackend.Models
         public Guid CategoriaId { get; set; }
         [Display(Name = "Categoria")]
         public Categoria? Categoria { get; set; }
+
 
     }
 }

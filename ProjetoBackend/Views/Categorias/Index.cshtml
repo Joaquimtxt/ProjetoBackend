@@ -1,40 +1,57 @@
 ﻿@model IEnumerable<ProjetoBackend.Models.Categoria>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Categorias de Produtos";
 }
+<div class="container-fluid text-center my-4">
+    <img class="img-fluid" src="img/jaketa-white.png" width="397" height="132" />
+</div>
 
-<h1>Index</h1>
-<form asp-action="Search" method="get">
-    <input type="text" name="nome" placeholder="Buscar categoria por nome..." />
-    <button type="submit"><ion-icon name="search"></ion-icon>Buscar</button>
-</form>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nome)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Nome)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.CategoriaId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.CategoriaId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.CategoriaId">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<h1 class="text-light text-center">Categorias de Produtos:</h1>
+<hr />
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <a asp-action="Create" class="btn text-black btn-adicionar">Adicionar</a>
+        </div>
+        <div class="search-container">
+            <form asp-action="Search" method="get" class="d-flex">
+                <input class="search-input" type="text" name="nome" placeholder="Procurar..." />
+                <button type="submit" class="btn search-button"><ion-icon name="search"></ion-icon></button>
+            </form>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr class="table-dark">
+                    <th>@Html.DisplayNameFor(model => model.Nome)</th>
+                    <th>Editar</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Nome)</td>
+
+                        <td>
+                            <div class="dropdown">
+                                <ion-icon name="ellipsis-horizontal-outline" class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                </ion-icon>
+
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <a class="dropdown-item" asp-action="Edit" asp-route-id="@item.CategoriaId">Editar</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" asp-action="Delete" asp-route-id="@item.CategoriaId">Apagar</a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

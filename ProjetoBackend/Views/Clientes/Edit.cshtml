@@ -64,15 +64,20 @@
                 </div>
             </div>
 
+
+
+            <input type="hidden" id="cadAtivo" asp-for="CadastroAtivo" class="form-control" />
+
             <div class="col-12 col-md-4 mt-2">
                 <div class="form-group text-light">
-                    <label>CadastroAtivo</label>
-                    <select class="form-select" id="CadastroAtivo" name="CadastroAtivo">
-                        <option value="true">Sim</option>
-                        <option value="false">Não</option>
+                    <label>Cadastro Ativo</label>
+                    <select class="form-select" id="CadastroAtivo" name="SelectCadAtivo" onchange="onChangeSelect()">
+                        <option value="True">Sim</option>
+                        <option value="False">Não</option>
                     </select>
                 </div>
             </div>
+
         </div>
         <div class="row">
 

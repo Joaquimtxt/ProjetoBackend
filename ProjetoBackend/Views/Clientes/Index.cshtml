@@ -47,7 +47,18 @@
                         <td>@Html.DisplayFor(modelItem => item.Celular)</td>
                         <td>@Html.DisplayFor(modelItem => item.DataNascimento)</td>
                         <td>@Html.DisplayFor(modelItem => item.DataCadastro)</td>
-                        <td>@Html.DisplayFor(modelItem => item.CadastroAtivo)</td>
+                        <td>
+                            @{
+                                if (item.CadastroAtivo == true)
+                                {
+                                    <span>Sim</span>
+                                }
+                                else
+                                {
+                                    <span>Não</span>
+                                }
+                            }
+                        </td>
                         <td>
                             <div class="dropdown">
                                 <ion-icon name="ellipsis-horizontal-outline" class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
