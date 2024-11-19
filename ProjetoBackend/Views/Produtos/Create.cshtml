@@ -1,4 +1,4 @@
-﻿@model ProjetoBackend.Models.Cliente
+﻿@model ProjetoBackend.Models.Produto
 
 @{
     ViewData["Title"] = "Adicionar";
@@ -22,45 +22,53 @@
             </div>
             <div class="col-12 col-md mt-2">
                 <div class="form-group text-light">
-                    <label asp-for="Email" class="control-label"></label>
-                    <input asp-for="Email" class="form-control" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
+                    <label asp-for="CodigoProduto" class="control-label"></label>
+                    <input asp-for="CodigoProduto" class="form-control" />
+                    <span asp-validation-for="CodigoProduto" class="text-danger"></span>
                 </div>
             </div>
         </div>
 
         <div class="row ms-3 me-3">
-            <div class="col-12 col-md-5 mt-2">
+            <div class="col-12 col-md-6 mt-2">
                 <div class="form-group text-light">
-                    <label asp-for="Celular" class="control-label"></label>
-                    <input asp-for="Celular" class="form-control" oninput="formatarTelefone(this)" id="telefone" />
-                    <span asp-validation-for="Celular" class="text-danger"></span>
+                    <label asp-for="Preco" class="control-label"></label>
+                    <input asp-for="Preco" class="form-control" />
+                    <span asp-validation-for="Preco" class="text-danger"></span>
                 </div>
             </div>
 
-            <div class="col-12 col-md-4 mt-2">
+            <div class="col-12 col-md mt-2">
                 <div class="form-group text-light">
-                    <label asp-for="CnpjCpf" class="control-label"></label>
-                    <input asp-for="CnpjCpf" class="form-control" />
-                    <span asp-validation-for="CnpjCpf" class="text-danger"></span>
+                    <label asp-for="Estoque" class="control-label"></label>
+                    <input asp-for="Estoque" class="form-control" />
+                    <span asp-validation-for="Estoque" class="text-danger"></span>
                 </div>
             </div>
-            <div class="col-12 col-md-3 mt-2">
+        </div>
+
+
+
+
+
+        <div class="row ms-3 me-3">
+            <div class="col-12 col-md-6 mt-2">
                 <div class="form-group text-light">
                     <div class="form-group">
-                        <label asp-for="DataNascimento" class="control-label"></label>
-                        <input type="date" asp-for="DataNascimento" class="form-control" />
-                        <span asp-validation-for="DataNascimento" class="text-danger"></span>
+                        <label asp-for="CaracteristicaId" class="control-label"></label>
+                        <select asp-for="CaracteristicaId" class="form-control" asp-items="ViewBag.CaracteristicaId"></select>
                     </div>
                 </div>
             </div>
-            <div class="form-group">
-                <input type="hidden" asp-for="DataCadastro" class="form-control" />
 
-            </div>
-            <div class="form-group">
 
-                <input type="hidden" asp-for="CadastroAtivo" class="form-control" />
+            <div class="col-12 col-md-6 mt-2">
+                <div class="form-group text-light">
+                    <div class="form-group">
+                        <label asp-for="CategoriaId" class="control-label"></label>
+                        <select asp-for="CategoriaId" class="form-control" asp-items="ViewBag.CategoriaId"></select>
+                    </div>
+                </div>
 
             </div>
         </div>

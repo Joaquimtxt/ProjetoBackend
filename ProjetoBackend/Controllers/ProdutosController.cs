@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -19,12 +20,28 @@ namespace ProjetoBackend.Controllers
             _context = context;
         }
 
+
         // GET: Produtos
         public async Task<IActionResult> Index()
         {
+            var produtos = await _context.Produtos.ToListAsync();
             var applicationDbContext = _context.Produtos.Include(p => p.Categoria);
             return View(await applicationDbContext.ToListAsync());
         }
+
+        // GET: Clientes/Search?nome={clientName} (New Search Action)
+        public async Task<IActionResult> Search(string nome)
+        {
+            if (string.IsNullOrEmpty(nome)) // Handle empty search term
+            {
+                return RedirectToAction(nameof(Index)); // Redirect to main Index
+            }
+
+            var produtos = await _context.Produtos.Where(c => c.Nome.Contains(nome)).ToListAsync();
+            return View("Index", produtos.OrderBy(c => c.Nome)); // Reuse the existing Index view
+        }
+
+
 
         // GET: Produtos/Details/5
         public async Task<IActionResult> Details(Guid? id)
@@ -45,10 +62,12 @@ namespace ProjetoBackend.Controllers
             return View(produto);
         }
 
+
         // GET: Produtos/Create
         public IActionResult Create()
         {
             ViewData["CategoriaId"] = new SelectList(_context.Categorias, "CategoriaId", "Nome");
+            ViewData["CaracteristicaId"] = new SelectList(_context.Caracteristicas, "CaracteristicaId", "Nome");
             return View();
         }
 
@@ -57,7 +76,7 @@ namespace ProjetoBackend.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProdutoId,Nome,CodigoProduto,Preco,Estoque,tipoProduto,CategoriaId")] Produto produto)
+        public async Task<IActionResult> Create([Bind("ProdutoId,Nome,CodigoProduto,Preco,Estoque,tipoProduto,CategoriaId,CaracteristicaId")] Produto produto)
         {
             if (ModelState.IsValid)
             {
@@ -67,6 +86,7 @@ namespace ProjetoBackend.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoriaId"] = new SelectList(_context.Categorias, "CategoriaId", "Nome", produto.CategoriaId);
+            ViewData["CaracteristicaId"] = new SelectList(_context.Caracteristicas, "CaracteristicaId", "Nome");
             return View(produto);
         }
 
@@ -84,6 +104,7 @@ namespace ProjetoBackend.Controllers
                 return NotFound();
             }
             ViewData["CategoriaId"] = new SelectList(_context.Categorias, "CategoriaId", "Nome", produto.CategoriaId);
+            ViewData["CaracteristicaId"] = new SelectList(_context.Caracteristicas, "CaracteristicaId", "Nome", produto.CaracteristicaId);
             return View(produto);
         }
 
@@ -120,6 +141,7 @@ namespace ProjetoBackend.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoriaId"] = new SelectList(_context.Categorias, "CategoriaId", "Nome", produto.CategoriaId);
+            ViewData["CaracteristicaId"] = new SelectList(_context.Caracteristicas, "CaracteristicaId", "Nome", produto.CaracteristicaId);
             return View(produto);
         }
 

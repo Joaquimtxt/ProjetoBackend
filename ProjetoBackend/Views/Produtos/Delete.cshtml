@@ -1,8 +1,9 @@
-﻿@model ProjetoBackend.Models.Fornecedor
+﻿@model ProjetoBackend.Models.Produto
 
 @{
     ViewData["Title"] = "Apagar";
 }
+
 <div class="container-fluid text-center my-4">
     <img class="img-fluid" src="~/img/jaketa-white.png" width="397" height="132" />
 </div>
@@ -18,22 +19,29 @@
                 @Html.DisplayFor(model => model.Nome)
             </dd>
             <dt class="col-sm-4 text-end">
-                @Html.DisplayNameFor(model => model.Email)
+                @Html.DisplayNameFor(model => model.CodigoProduto)
             </dt>
             <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.Email)
+                @Html.DisplayFor(model => model.CodigoProduto)
             </dd>
             <dt class="col-sm-4 text-end">
-                @Html.DisplayNameFor(model => model.CnpjCpf)
+                @Html.DisplayNameFor(model => model.Preco)
             </dt>
             <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.CnpjCpf)
+                @Html.DisplayFor(model => model.Preco)
             </dd>
             <dt class="col-sm-4 text-end">
-                @Html.DisplayNameFor(model => model.Celular)
+                @Html.DisplayNameFor(model => model.Estoque)
             </dt>
             <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.Celular)
+                @Html.DisplayFor(model => model.Estoque)
+            </dd>
+
+            <dt class="col-sm-4 text-end">
+                @Html.DisplayNameFor(model => model.Categoria)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Categoria.Nome)
             </dd>
         </dl>
     </div>
@@ -53,42 +61,3 @@
         </div>
     </form>
 </div>
-<!--
-
-<div>
-    <h4>Fornecedor</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-@Html.DisplayNameFor(model => model.Nome)
-        </dt>
-        <dd class = "col-sm-10">
-@Html.DisplayFor(model => model.Nome)
-        </dd>
-        <dt class = "col-sm-2">
-@Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-@Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-@Html.DisplayNameFor(model => model.Celular)
-        </dt>
-        <dd class = "col-sm-10">
-@Html.DisplayFor(model => model.Celular)
-        </dd>
-        <dt class = "col-sm-2">
-@Html.DisplayNameFor(model => model.CnpjCpf)
-        </dt>
-        <dd class = "col-sm-10">
-@Html.DisplayFor(model => model.CnpjCpf)
-        </dd>
-    </dl>
-
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="FornecedorId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
-</div>
--->

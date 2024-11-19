@@ -12,15 +12,15 @@ using ProjetoBackend.Data;
 namespace ProjetoBackend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241022121620_Start")]
-    partial class Start
+    [Migration("20241119145920_nova")]
+    partial class nova
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.10")
+                .HasAnnotation("ProductVersion", "8.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -227,6 +227,21 @@ namespace ProjetoBackend.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ProjetoBackend.Models.Caracteristica", b =>
+                {
+                    b.Property<Guid>("CaracteristicaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CaracteristicaId");
+
+                    b.ToTable("Caracteristicas", (string)null);
+                });
+
             modelBuilder.Entity("ProjetoBackend.Models.Categoria", b =>
                 {
                     b.Property<Guid>("CategoriaId")
@@ -393,8 +408,16 @@ namespace ProjetoBackend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("CaracteristicaId")
+                        .IsRequired()
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("CategoriaId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CodigoProduto")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Estoque")
                         .HasColumnType("float");
@@ -407,6 +430,8 @@ namespace ProjetoBackend.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("ProdutoId");
+
+                    b.HasIndex("CaracteristicaId");
 
                     b.HasIndex("CategoriaId");
 
@@ -579,11 +604,19 @@ namespace ProjetoBackend.Migrations
 
             modelBuilder.Entity("ProjetoBackend.Models.Produto", b =>
                 {
+                    b.HasOne("ProjetoBackend.Models.Caracteristica", "Caracteristica")
+                        .WithMany()
+                        .HasForeignKey("CaracteristicaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ProjetoBackend.Models.Categoria", "Categoria")
                         .WithMany()
                         .HasForeignKey("CategoriaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Caracteristica");
 
                     b.Navigation("Categoria");
                 });

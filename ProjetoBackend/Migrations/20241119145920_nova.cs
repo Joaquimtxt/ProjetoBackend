@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ProjetoBackend.Migrations
 {
     /// <inheritdoc />
-    public partial class Start : Migration
+    public partial class nova : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,6 +48,18 @@ namespace ProjetoBackend.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Caracteristicas",
+                columns: table => new
+                {
+                    CaracteristicaId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Caracteristicas", x => x.CaracteristicaId);
                 });
 
             migrationBuilder.CreateTable(
@@ -221,13 +233,21 @@ namespace ProjetoBackend.Migrations
                 {
                     ProdutoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CodigoProduto = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Preco = table.Column<double>(type: "float", nullable: false),
                     Estoque = table.Column<double>(type: "float", nullable: false),
-                    CategoriaId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    CategoriaId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CaracteristicaId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Produtos", x => x.ProdutoId);
+                    table.ForeignKey(
+                        name: "FK_Produtos_Caracteristicas_CaracteristicaId",
+                        column: x => x.CaracteristicaId,
+                        principalTable: "Caracteristicas",
+                        principalColumn: "CaracteristicaId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Produtos_Categorias_CategoriaId",
                         column: x => x.CategoriaId,
@@ -421,6 +441,11 @@ namespace ProjetoBackend.Migrations
                 column: "VendaId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Produtos_CaracteristicaId",
+                table: "Produtos",
+                column: "CaracteristicaId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Produtos_CategoriaId",
                 table: "Produtos",
                 column: "CategoriaId");
@@ -488,6 +513,9 @@ namespace ProjetoBackend.Migrations
 
             migrationBuilder.DropTable(
                 name: "Fornecedores");
+
+            migrationBuilder.DropTable(
+                name: "Caracteristicas");
 
             migrationBuilder.DropTable(
                 name: "Categorias");

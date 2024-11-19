@@ -1,7 +1,7 @@
-﻿@model ProjetoBackend.Models.Categoria
+﻿@model ProjetoBackend.Models.Caracteristica
 
 @{
-    ViewData["Title"] = "Editar";
+    ViewData["Title"] = "Adicionar";
 }
 
 <div class="container-fluid text-center my-4">
@@ -9,13 +9,13 @@
 </div>
 
 <div class="container">
-    <form asp-action="Edit">
+
+    <form asp-action="Create">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="row ms-3 me-3">
             <div class="col-12 mt-2">
-                <input type="hidden" asp-for="CategoriaId" />
                 <div class="form-group text-light">
-                    <label asp-for="Nome" class="control-label"></label>
+                    <label asp-for="Nome" class="control-label">Nome:</label>
                     <input asp-for="Nome" class="form-control" />
                     <span asp-validation-for="Nome" class="text-danger"></span>
                 </div>
@@ -23,10 +23,12 @@
         </div>
 
         <div class="row">
+
             <div class="justify-content-center align-items-center d-flex">
+
                 <div class="col col-md-4 mt-4 ms-5 me-5">
                     <div class="form-group">
-                        <input type="submit" value="Editar" class="btn btn-primary text-black w-100" />
+                        <input type="submit" value="Adicionar" class="btn btn-adicionar text-black w-100" />
                     </div>
                 </div>
                 <div class="col-2 col-md-4 mt-4 me-5">
@@ -38,29 +40,6 @@
 </div>
 
 
-<!--
-
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-            <div class="form-group">
-                <label asp-for="Nome" class="control-label"></label>
-                <input asp-for="Nome" class="form-control" />
-                <span asp-validation-for="Nome" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
--->
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

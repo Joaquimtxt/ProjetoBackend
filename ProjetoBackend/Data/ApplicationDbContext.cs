@@ -25,6 +25,8 @@ namespace ProjetoBackend.Data
         public DbSet<ItemCompra> ItensCompra { get; set; }
         public DbSet<ServicoVenda> ServicoVenda { get; set; }
 
+        public DbSet<Caracteristica> Caracteristicas { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Configuração de mapeamento de entidades
@@ -38,6 +40,7 @@ namespace ProjetoBackend.Data
             modelBuilder.Entity<Compra>().ToTable("Compras");
             modelBuilder.Entity<ItemCompra>().ToTable("ItensCompra");
             modelBuilder.Entity<ServicoVenda>().ToTable("ServicosVendas");
+            modelBuilder.Entity<Caracteristica>().ToTable("Caracteristicas");
         }
 
     }

@@ -16,9 +16,6 @@ namespace ProjetoBackend.Models
         [Display(Name = "Estoque")]
         [Required(ErrorMessage = "O Campo Estoque do Produto é Obrigatório!")]
         public double Estoque { get; set; }
-        [Display(Name = "Produto")]
-        [Required(ErrorMessage = "Selecione um tipo!")]
-        public string tipoProduto { get; set; }
 
         /** Relacionamento entre tabelas **/
         /* Chave Estrangeria */
@@ -28,6 +25,10 @@ namespace ProjetoBackend.Models
         [Display(Name = "Categoria")]
         public Categoria? Categoria { get; set; }
 
-
+        [Required(ErrorMessage = "Selecione a Caracteristica")]
+        [Display(Name = "Caracteristica")]
+        public Guid? CaracteristicaId { get; set; }
+        [Display(Name = "Caracteristica")]
+        public Caracteristica? Caracteristica { get; set; }
     }
 }

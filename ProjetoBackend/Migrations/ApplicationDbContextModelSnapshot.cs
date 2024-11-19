@@ -224,6 +224,21 @@ namespace ProjetoBackend.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ProjetoBackend.Models.Caracteristica", b =>
+                {
+                    b.Property<Guid>("CaracteristicaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CaracteristicaId");
+
+                    b.ToTable("Caracteristicas", (string)null);
+                });
+
             modelBuilder.Entity("ProjetoBackend.Models.Categoria", b =>
                 {
                     b.Property<Guid>("CategoriaId")
@@ -390,6 +405,10 @@ namespace ProjetoBackend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("CaracteristicaId")
+                        .IsRequired()
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("CategoriaId")
                         .HasColumnType("uniqueidentifier");
 
@@ -407,11 +426,9 @@ namespace ProjetoBackend.Migrations
                     b.Property<double>("Preco")
                         .HasColumnType("float");
 
-                    b.Property<string>("tipoProduto")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("ProdutoId");
+
+                    b.HasIndex("CaracteristicaId");
 
                     b.HasIndex("CategoriaId");
 
@@ -584,11 +601,19 @@ namespace ProjetoBackend.Migrations
 
             modelBuilder.Entity("ProjetoBackend.Models.Produto", b =>
                 {
+                    b.HasOne("ProjetoBackend.Models.Caracteristica", "Caracteristica")
+                        .WithMany()
+                        .HasForeignKey("CaracteristicaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ProjetoBackend.Models.Categoria", "Categoria")
                         .WithMany()
                         .HasForeignKey("CategoriaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Caracteristica");
 
                     b.Navigation("Categoria");
                 });
