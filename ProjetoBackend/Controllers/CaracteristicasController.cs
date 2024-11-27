@@ -25,6 +25,17 @@ namespace ProjetoBackend.Controllers
             return View(await _context.Caracteristicas.ToListAsync());
         }
 
+        // GET: Caracteristicas/Search?nome={clientName} (New Search Action)
+        public async Task<IActionResult> Search(string nome)
+        {
+            if (string.IsNullOrEmpty(nome)) // Handle empty search term
+            {
+                return RedirectToAction(nameof(Index)); // Redirect to main Index
+            }
+
+            var caracteristicas = await _context.Caracteristicas.Where(c => c.Nome.Contains(nome)).ToListAsync();
+            return View("Index", caracteristicas.OrderBy(c => c.Nome)); // Reuse the existing Index view
+        }
         // GET: Caracteristicas/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {

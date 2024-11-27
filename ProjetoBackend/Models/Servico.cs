@@ -10,6 +10,6 @@ namespace ProjetoBackend.Models
         public string Nome { get; set; }
         [Required(ErrorMessage = "O Campo Valor do Serviço é Obrigatório!")]
         [Display(Name = "Valor")]
-        public double ValorServico { get; set; }
+        public decimal ValorServico { get; set; }
     }
 }

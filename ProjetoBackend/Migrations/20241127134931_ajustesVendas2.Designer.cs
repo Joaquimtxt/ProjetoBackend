@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjetoBackend.Data;
 
@@ -11,9 +12,11 @@ using ProjetoBackend.Data;
 namespace ProjetoBackend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241127134931_ajustesVendas2")]
+    partial class ajustesVendas2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -375,13 +378,11 @@ namespace ProjetoBackend.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("ProdutoId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Quantidade")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("ServicoId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<decimal>("Quantidade")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("ValorTotal")
                         .HasColumnType("decimal(18,2)");
@@ -395,8 +396,6 @@ namespace ProjetoBackend.Migrations
                     b.HasKey("ItemVendaId");
 
                     b.HasIndex("ProdutoId");
-
-                    b.HasIndex("ServicoId");
 
                     b.HasIndex("VendaId");
 
@@ -588,11 +587,9 @@ namespace ProjetoBackend.Migrations
                 {
                     b.HasOne("ProjetoBackend.Models.Produto", "Produto")
                         .WithMany()
-                        .HasForeignKey("ProdutoId");
-
-                    b.HasOne("ProjetoBackend.Models.Servico", "Servico")
-                        .WithMany()
-                        .HasForeignKey("ServicoId");
+                        .HasForeignKey("ProdutoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ProjetoBackend.Models.Venda", "Venda")
                         .WithMany("ItensVenda")
@@ -601,8 +598,6 @@ namespace ProjetoBackend.Migrations
                         .IsRequired();
 
                     b.Navigation("Produto");
-
-                    b.Navigation("Servico");
 
                     b.Navigation("Venda");
                 });

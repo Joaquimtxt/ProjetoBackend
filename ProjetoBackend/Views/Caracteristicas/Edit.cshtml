@@ -1,34 +1,43 @@
 ﻿@model ProjetoBackend.Models.Caracteristica
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar";
 }
-
-<h1>Edit</h1>
-
-<h4>Caracteristica</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="CaracteristicaId" />
-            <div class="form-group">
-                <label asp-for="Nome" class="control-label"></label>
-                <input asp-for="Nome" class="form-control" />
-                <span asp-validation-for="Nome" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+<div class="container-fluid text-center my-4">
+    <img class="img-fluid" src="~/img/jaketa-white.png" width="397" height="132" />
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="container">
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="row ms-3 me-3">
+            <div class="col-12 mt-2">
+                <input type="hidden" asp-for="CaracteristicaId" />
+                <div class="form-group text-light">
+                    <label asp-for="Nome" class="control-label"></label>
+                    <input asp-for="Nome" class="form-control" />
+                    <span asp-validation-for="Nome" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="justify-content-center align-items-center d-flex">
+                <div class="col-4 mt-4 ms-sm-1 me-sm-1 ms-xl-5 me-xl-5">
+                    <div class="form-group">
+                        <input type="submit" value="Editar" class="btn btn-primary text-black w-100" />
+                    </div>
+                </div>
+                <div class="col-4 mt-4 ms-sm-1 me-sm-1 ms-xl-5 me-xl-5">
+                    <a class="btn btn-outline-secondary w-100" asp-action="Index">Cancelar</a>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

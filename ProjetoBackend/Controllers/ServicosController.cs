@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using ProjetoBackend.Models;
 
 namespace ProjetoBackend.Controllers
 {
+    [Authorize]
     public class ServicosController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -25,6 +27,18 @@ namespace ProjetoBackend.Controllers
             var servicos = await _context.Servicos.ToListAsync();
             return View(servicos.OrderBy(s => s.Nome));
         }
+        // GET: Servicos/Search?nome={clientName} (New Search Action)
+        public async Task<IActionResult> Search(string nome)
+        {
+            if (string.IsNullOrEmpty(nome)) // Handle empty search term
+            {
+                return RedirectToAction(nameof(Index)); // Redirect to main Index
+            }
+
+            var servicos = await _context.Servicos.Where(s => s.Nome.Contains(nome)).ToListAsync();
+            return View("Index", servicos.OrderBy(s => s.Nome)); // Reuse the existing Index view
+        }
+
 
         // GET: Servicos/Details/5
         public async Task<IActionResult> Details(Guid? id)
@@ -155,5 +169,27 @@ namespace ProjetoBackend.Controllers
         {
             return _context.Servicos.Any(e => e.ServicoId == id);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetServicoPorNome(string nome)
+        {
+            if (string.IsNullOrEmpty(nome))
+            {
+                return BadRequest("Nome do serviço é necessário.");
+            }
+
+            var servico = await _context.Servicos
+                .Where(s => s.Nome == nome)
+                .Select(s => new { s.Nome, s.ValorServico })
+                .FirstOrDefaultAsync();
+
+            if (servico == null)
+            {
+                return NotFound("Serviço não encontrado.");
+            }
+
+            return Json(servico);
+        }
     }
 }
+

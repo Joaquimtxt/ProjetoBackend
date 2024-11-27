@@ -7,48 +7,63 @@
 
 <body>
     <div class="container-fluid text-center my-4">
-        <img class="img-fluid" src="img/jaketa-white.png" width="397" height="132" />
+        <img class="img-fluid" src="../img/jaketa-white.png" width="397" height="132" />
     </div>
     <div class="container-fluid">
 
         <div class="row justify-content-md-center gap-4 mb-4">
             <div class="col-md-3 position-relative">
-                <img class="img-fluid fixed-size" src="img/mesas.png" alt="Mesas" />
-                <h3 class="text-light text-overlay fs-4">Mesas</h3>
+                <a href="@Url.Action("SearchByCategory", "Produtos", new { nome = "Mesas" })">
+                    <img class="img-fluid fixed-size" src="img/mesas.png" alt="Mesas" />
+                    <h3 class="text-light text-overlay fs-4">Mesas</h3>
+                </a>
             </div>
             <div class="col-md-3 position-relative">
-                <img class="img-fluid fixed-size" src="img/cadeiras.png" alt="Cadeiras e Poltronas" />
-                <h3 class="text-light text-overlay fs-5">Cadeiras/ <br />Poltronas</h3>
+                <a href="@Url.Action("SearchByCategory", "Produtos", new { nome = "Cadeiras/Poltronas" })">
+                    <img class="img-fluid fixed-size" src="img/cadeiras.png" alt="Cadeiras e Poltronas" />
+                    <h3 class="text-light text-overlay fs-5">Cadeiras/ <br />Poltronas</h3>
+                </a>
             </div>
             <div class="col-md-3 position-relative">
-                <img class="img-fluid fixed-size" src="img/armariosestantes.png" alt="Armários e Estantes" />
-                <h3 class="text-light text-overlay fs-5">Armários/ <br />Estantes</h3>
-            </div>
-        </div>
-
-        <div class="row justify-content-md-center gap-4 mb-4">
-            <div class="col-md-3 position-relative">
-                <img class="img-fluid fixed-size" src="img/persiana.png" alt="Persianas e divisórias" />
-                <h3 class="text-light text-overlay fs-4">Persianas/ <br />Divisória</h3>
-            </div>
-            <div class="col-md-3 position-relative">
-                <img class="img-fluid fixed-size" src="img/reuniaomesa.png" alt="Mesas p/ Reunião" />
-                <h3 class="text-light text-overlay fs-5">Mesas p/ <br />Reunião</h3>
-            </div>
-            <div class="col-md-3 position-relative">
-                <img class="img-fluid fixed-size" src="img/estacaobalcao.jpg" alt="Estações de trabalho / Balcão" />
-                <h3 class="text-light text-overlay fs-5">Estações de trabalho/ <br />Balcão</h3>
+                <a href="@Url.Action("SearchByCategory", "Produtos", new { nome = "Armários/Estantes" })">
+                    <img class="img-fluid fixed-size" src="img/armariosestantes.png" alt="Armários e Estantes" />
+                    <h3 class="text-light text-overlay fs-5">Armários/ <br />Estantes</h3>
+                </a>
             </div>
         </div>
 
         <div class="row justify-content-md-center gap-4 mb-4">
             <div class="col-md-3 position-relative">
-                <img class="img-fluid fixed-size" src="img/linhaescolar.png" alt="Linha escolar" />
-                <h3 class="text-light text-overlay fs-4">Linha escolar</h3>
+                <a href="@Url.Action("SearchByCategory", "Produtos", new { nome = "Persianas/Divisórias" })">
+                    <img class="img-fluid fixed-size" src="img/persiana.png" alt="Persianas e divisórias" />
+                    <h3 class="text-light text-overlay fs-4">Persianas/ <br />Divisória</h3>
+                </a>
             </div>
             <div class="col-md-3 position-relative">
-                <img class="img-fluid fixed-size" src="img/cofres.png" alt="Cofres / Ventiladores" />
-                <h3 class="text-light text-overlay fs-5">Cofres/ <br />Ventiladores</h3>
+                <a href="@Url.Action("SearchByCategory", "Produtos", new { nome = "Mesas reunião" })">
+                    <img class="img-fluid fixed-size" src="img/reuniaomesa.png" alt="Mesas p/ Reunião" />
+                    <h3 class="text-light text-overlay fs-5">Mesas p/ <br />Reunião</h3>
+                </a>
+            </div>
+            <div class="col-md-3 position-relative">
+                <a href="@Url.Action("SearchByCategory", "Produtos", new { nome = "Estações trabalho/Balcão" })">
+                    <img class="img-fluid fixed-size" src="img/estacaobalcao.jpg" alt="Estações de trabalho / Balcão" />
+                    <h3 class="text-light text-overlay fs-5">Estações de trabalho/ <br />Balcão</h3>
+            </div>
+        </div>
+
+        <div class="row justify-content-md-center gap-4 mb-4">
+            <div class="col-md-3 position-relative">
+                <a href="@Url.Action("SearchByCategory", "Produtos", new { nome = "Escolar" })">
+                    <img class="img-fluid fixed-size" src="img/linhaescolar.png" alt="Linha escolar" />
+                    <h3 class="text-light text-overlay fs-4">Linha escolar</h3>
+                </a>
+            </div>
+            <div class="col-md-3 position-relative">
+                <a href="@Url.Action("SearchByCategory", "Produtos", new { nome = "Cofres/Ventiladores" })">
+                    <img class="img-fluid fixed-size" src="img/cofres.png" alt="Cofres / Ventiladores" />
+                    <h3 class="text-light text-overlay fs-5">Cofres/ <br />Ventiladores</h3>
+                </a>
             </div>
         </div>
     </div>

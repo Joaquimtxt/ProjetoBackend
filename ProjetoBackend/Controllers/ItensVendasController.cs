@@ -38,7 +38,7 @@ namespace ProjetoBackend.Controllers
 
             var itemVenda = await _context.ItensVenda
                 .Include(i => i.Produto)
-                .Include(i => i.Venda)
+                .Include(v => v.Venda)
                 .FirstOrDefaultAsync(m => m.ItemVendaId == id);
             if (itemVenda == null)
             {
@@ -48,46 +48,50 @@ namespace ProjetoBackend.Controllers
             return View(itemVenda);
         }
 
-        // GET: ItensVendas/Create
-        public IActionResult Create(Guid? id)
-        {
-            ViewData["ProdutoId"] = new SelectList(_context.Produtos, "ProdutoId", "Nome");
-            ViewData["VendaId"] = id;
-            return View();
-        }
-
         // POST: ItensVendas/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ItemVendaId,VendaId,ProdutoId,Quantidade,ValorUnitario,ValorTotal")] ItemVenda itemVenda)
+        public async Task<IActionResult> Create([Bind("ItemVendaId,VendaId,ProdutoId,ServicoId,Quantidade,ValorUnitario,ValorTotal")] ItemVenda itemVenda)
         {
             if (ModelState.IsValid)
             {
+                // Se o item for um produto, obtém o preço do produto
+                if (itemVenda.ProdutoId != Guid.Empty)
+                {
+                    var produto = await _context.Produtos.FindAsync(itemVenda.ProdutoId);
+                    if (produto != null)
+                    {
+                        itemVenda.ValorUnitario = produto.Preco;
+                        itemVenda.ValorTotal = itemVenda.Quantidade * itemVenda.ValorUnitario;
+                    }
+                }
+                // Se o item for um serviço, obtém o preço do serviço
+                else if (itemVenda.ServicoId != Guid.Empty)
+                {
+                    var servico = await _context.Servicos.FindAsync(itemVenda.ServicoId);
+                    if (servico != null)
+                    {
+                        itemVenda.ValorUnitario = servico.ValorServico;
+                        itemVenda.ValorTotal = itemVenda.Quantidade * itemVenda.ValorUnitario;
+                    }
+                }
+
+                // Atribui um novo ID para o item de venda
                 itemVenda.ItemVendaId = Guid.NewGuid();
                 _context.Add(itemVenda);
                 await _context.SaveChangesAsync();
-                //Selecionar todos os itens dessa venda e somar o valor total, e atualizar o valor total da venda
 
-                // lista de itens da venda
-                var listaItens = await _context.ItensVenda.Include(i => i.Produto).Include(i => i.Venda).Where(v => v.VendaId == itemVenda.VendaId).ToListAsync();
-
-                // Calcular o valor total da venda
-                var valorTotalVenda = listaItens.Sum(i => i.ValorTotal);
-
-                // Atualizar o valor total da venda correspondente
+                // Atualiza o valor total da venda
                 var venda = await _context.Vendas.FindAsync(itemVenda.VendaId);
-                venda.ValorTotal = valorTotalVenda;
+                venda.ValorTotal = await _context.ItensVenda
+                    .Where(i => i.VendaId == itemVenda.VendaId)
+                    .SumAsync(i => i.ValorTotal);
 
-                // Salvar mudança no banco de dados
+                _context.Update(venda);
                 await _context.SaveChangesAsync();
 
-                return View("Index", listaItens);
-
+                return RedirectToAction(nameof(Index), new { id = itemVenda.VendaId });
             }
-            ViewData["ProdutoId"] = new SelectList(_context.Produtos, "ProdutoId", "Nome", itemVenda.ProdutoId);
-            ViewData["VendaId"] = new SelectList(_context.Vendas, "VendaId", "NotaFiscal", itemVenda.VendaId);
             return View(itemVenda);
         }
 
@@ -186,7 +190,7 @@ namespace ProjetoBackend.Controllers
             return _context.ItensVenda.Any(e => e.ItemVendaId == id);
         }
 
-        public double PrecoProduto(Guid id)
+        public decimal PrecoProduto(Guid id)
         {
             var produto = _context.Produtos.Where(p => p.ProdutoId == id).FirstOrDefault();
             return produto.Preco;

@@ -12,10 +12,10 @@ namespace ProjetoBackend.Models
         public string CodigoProduto { get; set; }
         [Required(ErrorMessage = "O Campo Preço do Produto é Obrigatório!")]
         [Display(Name = "Preço")]
-        public double Preco { get; set; }
+        public decimal Preco { get; set; }
         [Display(Name = "Estoque")]
         [Required(ErrorMessage = "O Campo Estoque do Produto é Obrigatório!")]
-        public double Estoque { get; set; }
+        public int Estoque { get; set; }
 
         /** Relacionamento entre tabelas **/
         /* Chave Estrangeria */

@@ -38,4 +38,30 @@
     }
 
 
+    function formatarCpfCnpj(input) {
+        // Remove todos os caracteres que não sejam números
+        let valor = input.value.replace(/\D/g, '');
+
+        // Limita o número de dígitos a 14 (máximo para CNPJ)
+        if (valor.length > 14) {
+            valor = valor.substr(0, 14);
+        }
+
+        // Verifica se é CPF ou CNPJ com base no comprimento
+        if (valor.length <= 11) {
+            // CPF: Aplica a máscara no formato 000.000.000-00
+            valor = valor.replace(/(\d{3})(\d)/, "$1.$2");
+            valor = valor.replace(/(\d{3})(\d)/, "$1.$2");
+            valor = valor.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+        } else {
+            // CNPJ: Aplica a máscara no formato 00.000.000/0000-00
+            valor = valor.replace(/^(\d{2})(\d)/, "$1.$2");
+            valor = valor.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
+            valor = valor.replace(/\.(\d{3})(\d)/, ".$1/$2");
+            valor = valor.replace(/(\d{4})(\d)/, "$1-$2");
+        }
+
+        // Atualiza o valor do campo
+        input.value = valor;
+    }
 </script>

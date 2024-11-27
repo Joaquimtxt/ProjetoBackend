@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjetoBackend.Data;
 
@@ -11,9 +12,11 @@ using ProjetoBackend.Data;
 namespace ProjetoBackend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241127114738_ajustesCampoDecimal")]
+    partial class ajustesCampoDecimal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -375,19 +378,17 @@ namespace ProjetoBackend.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("ProdutoId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Quantidade")
-                        .HasColumnType("int");
+                    b.Property<double>("Quantidade")
+                        .HasColumnType("float");
 
-                    b.Property<Guid?>("ServicoId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<double>("ValorTotal")
+                        .HasColumnType("float");
 
-                    b.Property<decimal>("ValorTotal")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("ValorUnitario")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("ValorUnitario")
+                        .HasColumnType("float");
 
                     b.Property<Guid>("VendaId")
                         .HasColumnType("uniqueidentifier");
@@ -395,8 +396,6 @@ namespace ProjetoBackend.Migrations
                     b.HasKey("ItemVendaId");
 
                     b.HasIndex("ProdutoId");
-
-                    b.HasIndex("ServicoId");
 
                     b.HasIndex("VendaId");
 
@@ -420,8 +419,8 @@ namespace ProjetoBackend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Estoque")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Estoque")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -449,8 +448,8 @@ namespace ProjetoBackend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("ValorServico")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("ValorServico")
+                        .HasColumnType("float");
 
                     b.HasKey("ServicoId");
 
@@ -495,8 +494,8 @@ namespace ProjetoBackend.Migrations
                     b.Property<int?>("NotaFiscal")
                         .HasColumnType("int");
 
-                    b.Property<decimal?>("ValorTotal")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double?>("ValorTotal")
+                        .HasColumnType("float");
 
                     b.HasKey("VendaId");
 
@@ -588,21 +587,17 @@ namespace ProjetoBackend.Migrations
                 {
                     b.HasOne("ProjetoBackend.Models.Produto", "Produto")
                         .WithMany()
-                        .HasForeignKey("ProdutoId");
-
-                    b.HasOne("ProjetoBackend.Models.Servico", "Servico")
-                        .WithMany()
-                        .HasForeignKey("ServicoId");
+                        .HasForeignKey("ProdutoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ProjetoBackend.Models.Venda", "Venda")
-                        .WithMany("ItensVenda")
+                        .WithMany()
                         .HasForeignKey("VendaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Produto");
-
-                    b.Navigation("Servico");
 
                     b.Navigation("Venda");
                 });
@@ -635,7 +630,7 @@ namespace ProjetoBackend.Migrations
                         .IsRequired();
 
                     b.HasOne("ProjetoBackend.Models.Venda", "Venda")
-                        .WithMany("ServicosVenda")
+                        .WithMany()
                         .HasForeignKey("VendaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -654,13 +649,6 @@ namespace ProjetoBackend.Migrations
                         .IsRequired();
 
                     b.Navigation("Cliente");
-                });
-
-            modelBuilder.Entity("ProjetoBackend.Models.Venda", b =>
-                {
-                    b.Navigation("ItensVenda");
-
-                    b.Navigation("ServicosVenda");
                 });
 #pragma warning restore 612, 618
         }

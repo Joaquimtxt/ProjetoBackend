@@ -19,7 +19,58 @@ namespace ProjetoBackend.Controllers
             _context = context;
         }
 
-        // GET: ServicosVendas
+        [HttpGet]
+        public async Task<IActionResult> GetServicoPorNome(string nome)
+        {
+            if (string.IsNullOrEmpty(nome))
+            {
+                return BadRequest("Nome do serviço é necessário.");
+            }
+
+            var servico = await _context.Servicos
+                .Where(s => s.Nome.Contains(nome))  // Busca serviços com nome contendo o valor de 'nome'
+                .Select(s => new { s.Nome, s.ValorServico })  // Retorna nome e valor
+                .FirstOrDefaultAsync();
+
+            if (servico == null)
+            {
+                return NotFound("Serviço não encontrado.");
+            }
+
+            return Json(servico);  // Retorna os dados como JSON para o cliente
+        }
+
+        // GET: ServicosVendas/Create
+        public IActionResult Create()
+        {
+            ViewData["ServicoId"] = new SelectList(_context.Servicos, "ServicoId", "Nome");
+            ViewData["VendaId"] = new SelectList(_context.Vendas, "VendaId", "VendaId");
+            return View();
+        }
+
+        // POST: ServicosVendas/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("ServicoVendaId,ServicoId,VendaId")] ServicoVenda servicoVenda)
+        {
+            if (ModelState.IsValid)
+            {
+                servicoVenda.ServicoVendaId = Guid.NewGuid();
+                _context.Add(servicoVenda);
+                await _context.SaveChangesAsync();
+
+                // Atualizar o valor total da venda
+                var servico = await _context.Servicos.FindAsync(servicoVenda.ServicoId);
+                var venda = await _context.Vendas.FindAsync(servicoVenda.VendaId);
+                venda.ValorTotal += servico.ValorServico;
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["ServicoId"] = new SelectList(_context.Servicos, "ServicoId", "Nome", servicoVenda.ServicoId);
+            ViewData["VendaId"] = new SelectList(_context.Vendas, "VendaId", "VendaId", servicoVenda.VendaId);
+            return View(servicoVenda);
+        }
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.ServicoVenda.Include(s => s.Servico).Include(s => s.Venda);
@@ -46,32 +97,7 @@ namespace ProjetoBackend.Controllers
             return View(servicoVenda);
         }
 
-        // GET: ServicosVendas/Create
-        public IActionResult Create()
-        {
-            ViewData["ServicoId"] = new SelectList(_context.Servicos, "ServicoId", "Nome");
-            ViewData["VendaId"] = new SelectList(_context.Vendas, "VendaId", "VendaId");
-            return View();
-        }
 
-        // POST: ServicosVendas/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ServicoVendaId,ServicoId,VendaId")] ServicoVenda servicoVenda)
-        {
-            if (ModelState.IsValid)
-            {
-                servicoVenda.ServicoVendaId = Guid.NewGuid();
-                _context.Add(servicoVenda);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["ServicoId"] = new SelectList(_context.Servicos, "ServicoId", "Nome", servicoVenda.ServicoId);
-            ViewData["VendaId"] = new SelectList(_context.Vendas, "VendaId", "VendaId", servicoVenda.VendaId);
-            return View(servicoVenda);
-        }
 
         // GET: ServicosVendas/Edit/5
         public async Task<IActionResult> Edit(Guid? id)

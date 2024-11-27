@@ -9,7 +9,7 @@ namespace ProjetoBackend.Models
         [Display(Name = "Serviço")]
         public Guid? ServicoId { get; set; }
         [Display(Name = "Serviço")]
-        public Servico Servico { get; set; }
+        public Servico? Servico { get; set; }
 
         [Required(ErrorMessage = "Venda")]
         [Display(Name = "Venda")]
