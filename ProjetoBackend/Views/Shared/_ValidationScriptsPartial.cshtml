@@ -13,8 +13,8 @@
                 dataType: 'json',
                 success: function (data) {
                     $("#ValorUnitario").val(data);
-                    var total = data * quantidade;
-                    $("#ValorTotal").val(total);
+                    var total = parseFloat(data * quantidade);
+                    $("#ValorTotalP").val(total);
                 },
                 error: function () {
                     alert("Erro ao calcular o preço do produto.");
@@ -22,7 +22,26 @@
             });
         });
     });
+      $(document).ready(function () {
+        $("#servicoId").change(function () {
+            var id = $(this).val();
+            var quantidade = $("#Quantidade").val();
 
+            $.ajax({
+                url: '/ServicoVenda/PrecoProduto',
+                data: { id: id },
+                dataType: 'json',
+                success: function (data) {
+                    $("#ValorUnitario").val(data);
+                    var total = parseFloat(data * quantidade);
+                    $("#ValorTotalP").val(total);
+                },
+                error: function () {
+                    alert("Erro ao calcular o preço do produto.");
+                }
+            });
+        });
+    });
 
     function formatarTelefone(input) {
         // Remove todos os caracteres que não sejam números

@@ -46,9 +46,19 @@ namespace ProjetoBackend.Controllers
         }
 
         // GET: Vendas/Create
-        public IActionResult Create()
+        public IActionResult Create(Guid? id)
         {
+
+            Venda vendaAtual = _context.Vendas.Where(v => v.VendaId == id).Include(c => c.Cliente).FirstOrDefaultAsync().Result;
+            ViewData["vendaAtual"] = vendaAtual;
             ViewData["ClienteId"] = new SelectList(_context.Clientes, "ClienteId", "Nome");
+            ViewData["ProdutoId"] = new SelectList(_context.Produtos, "ProdutoId", "Nome");
+            List<ItemVenda> itens = null;
+            if (vendaAtual != null)
+            {
+                itens = _context.ItensVenda.Where(i => i.VendaId == vendaAtual.VendaId).Include(p => p.Produto).ToList();
+            }
+            ViewData["listaItens"] = itens;
             return View();
         }
 
@@ -67,10 +77,18 @@ namespace ProjetoBackend.Controllers
                 venda.VendaId = Guid.NewGuid();
                 _context.Add(venda);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                ViewData["ClienteId"] = new SelectList(_context.Clientes, "ClienteId", "Nome", venda.ClienteId);
+                ViewData["ProdutoId"] = new SelectList(_context.Produtos, "ProdutoId", "Nome");
+                List<ItemVenda> itensProdutos = await _context.ItensVenda.Where(i => i.VendaId == venda.VendaId).ToListAsync();
+                ViewData["listaItens"] = itensProdutos;
+                return RedirectToAction("Create", new { id = venda.VendaId });
             }
             ViewData["ClienteId"] = new SelectList(_context.Clientes, "ClienteId", "Nome", venda.ClienteId);
-            return View(venda);
+            ViewData["ProdutoId"] = new SelectList(_context.Produtos, "ProdutoId", "Nome");
+            List<ItemVenda> itens = await _context.ItensVenda.Where(i => i.VendaId == venda.VendaId).Include(p => p.Produto).ToListAsync();
+            ViewData["listaItens"] = itens;
+            return View("Create", venda);
         }
 
         // GET: Vendas/Edit/5
@@ -159,6 +177,38 @@ namespace ProjetoBackend.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddProduto(Guid VendaId, Guid ProdutoId, int Quantidade)
+        {
+
+            var produto = _context.Produtos.FindAsync(ProdutoId).Result;
+            ItemVenda itemVenda = new ItemVenda();
+            itemVenda.VendaId = VendaId;
+            itemVenda.Quantidade = Quantidade;
+            itemVenda.ProdutoId = ProdutoId;
+
+            itemVenda.ItemVendaId = Guid.NewGuid();
+            itemVenda.ValorUnitario = produto.Preco;
+            itemVenda.ValorTotal = Quantidade * produto.Preco;
+
+            _context.ItensVenda.Add(itemVenda);
+            await _context.SaveChangesAsync();
+
+            var venda = _context.Vendas.FindAsync(VendaId).Result;
+            venda.ValorTotal += itemVenda.ValorTotal;
+
+            _context.Update(venda);
+            await _context.SaveChangesAsync();
+
+            List<ItemVenda> itens = await _context.ItensVenda.Where(i => i.VendaId == VendaId).Include(p => p.Produto).ToListAsync();
+            ViewData["listaItens"] = itens;
+            return RedirectToAction("Create", new { id = VendaId });
+        }
+
+
 
         private bool VendaExists(Guid id)
         {

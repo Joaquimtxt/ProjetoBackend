@@ -127,8 +127,8 @@ namespace ProjetoBackend.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoriaId"] = new SelectList(_context.Categorias, "CategoriaId", "Nome", produto.CategoriaId);
-            ViewData["CaracteristicaId"] = new SelectList(_context.Caracteristicas, "CaracteristicaId", "Nome", produto.CaracteristicaId);
+            ViewData["CategoriaId"] = new SelectList(_context.Categorias, "CategoriaId", "Nome");
+            ViewData["CaracteristicaId"] = new SelectList(_context.Caracteristicas, "CaracteristicaId", "Nome");
             return View(produto);
         }
 
@@ -137,7 +137,7 @@ namespace ProjetoBackend.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("ProdutoId,Nome,CodigoProduto,Preco,Estoque,tipoProduto,CategoriaId")] Produto produto)
+        public async Task<IActionResult> Edit(Guid id, [Bind("ProdutoId,Nome,CodigoProduto,Preco,Estoque,tipoProduto,CategoriaId,CaracteristicaId")] Produto produto)
         {
             if (id != produto.ProdutoId)
             {
@@ -209,15 +209,15 @@ namespace ProjetoBackend.Controllers
             return _context.Produtos.Any(e => e.ProdutoId == id);
         }
         [HttpGet]
-        public async Task<IActionResult> GetProdutoPorCodigo(string codigo)
+        public async Task<IActionResult> GetProdutoPorCodigo(Guid codigo)
         {
-            if (string.IsNullOrEmpty(codigo))
+            if (codigo == null)
             {
                 return BadRequest("Código do produto é necessário.");
             }
 
             var produto = await _context.Produtos
-                .Where(cd => cd.CodigoProduto == codigo)
+                .Where(cd => cd.ProdutoId == codigo)
                 .Select(cd => new { cd.Nome, cd.Preco })
                 .FirstOrDefaultAsync();
 

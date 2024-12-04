@@ -19,26 +19,16 @@ namespace ProjetoBackend.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetServicoPorNome(string nome)
+        // GET: ServicosVendas
+        public async Task<IActionResult> Index(Guid? id)
         {
-            if (string.IsNullOrEmpty(nome))
-            {
-                return BadRequest("Nome do serviço é necessário.");
-            }
-
-            var servico = await _context.Servicos
-                .Where(s => s.Nome.Contains(nome))  // Busca serviços com nome contendo o valor de 'nome'
-                .Select(s => new { s.Nome, s.ValorServico })  // Retorna nome e valor
-                .FirstOrDefaultAsync();
-
-            if (servico == null)
-            {
-                return NotFound("Serviço não encontrado.");
-            }
-
-            return Json(servico);  // Retorna os dados como JSON para o cliente
+            var listaServicos = await _context.ServicoVenda.Include(s => s.Servico).Include(s => s.Venda).ToListAsync();
+            listaServicos = listaServicos.Where(s => s.VendaId == id).ToList();
+            ViewData["idVendaAtual"] = id;
+            return View("Index", listaServicos);
         }
+
+
 
         // GET: ServicosVendas/Create
         public IActionResult Create()
@@ -49,32 +39,39 @@ namespace ProjetoBackend.Controllers
         }
 
         // POST: ServicosVendas/Create
+        // POST: ServicosVendas/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ServicoVendaId,ServicoId,VendaId")] ServicoVenda servicoVenda)
+        public async Task<IActionResult> Create([Bind("ServicoVendaId,ServicoId,VendaId,Quantidade,Servicocusto,ValorTotal")] ServicoVenda servicoVenda)
         {
             if (ModelState.IsValid)
             {
-                servicoVenda.ServicoVendaId = Guid.NewGuid();
-                _context.Add(servicoVenda);
-                await _context.SaveChangesAsync();
+                //Se o item for um serviço, obtém o preço do serviço
+                if (servicoVenda.ServicoId != Guid.Empty)
+                {
+                    var servicop = await _context.Servicos.FindAsync(servicoVenda.ServicoId);
+                    if (servicop != null)
+                    {
+                        servicoVenda.Servicocusto = servicop.ValorServico;
+                        servicoVenda.ValorTotal = servicoVenda.Quantidade * servicoVenda.Servicocusto;
+                    }
+                    servicoVenda.ServicoVendaId = Guid.NewGuid();
+                    _context.Add(servicoVenda);
+                    await _context.SaveChangesAsync();
 
-                // Atualizar o valor total da venda
-                var servico = await _context.Servicos.FindAsync(servicoVenda.ServicoId);
-                var venda = await _context.Vendas.FindAsync(servicoVenda.VendaId);
-                venda.ValorTotal += servico.ValorServico;
-                await _context.SaveChangesAsync();
+                    // Atualizar o valor total da venda
+                    var servico = await _context.Servicos.FindAsync(servicoVenda.ServicoId);
+                    var venda = await _context.Vendas.FindAsync(servicoVenda.VendaId);
+                    venda.ValorTotal += servico.ValorServico;
+                    await _context.SaveChangesAsync();
 
-                return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index));
+                }
             }
+            // Se o ModelState não for válido ou se o ServicoId for Guid.Empty
             ViewData["ServicoId"] = new SelectList(_context.Servicos, "ServicoId", "Nome", servicoVenda.ServicoId);
             ViewData["VendaId"] = new SelectList(_context.Vendas, "VendaId", "VendaId", servicoVenda.VendaId);
             return View(servicoVenda);
-        }
-        public async Task<IActionResult> Index()
-        {
-            var applicationDbContext = _context.ServicoVenda.Include(s => s.Servico).Include(s => s.Venda);
-            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: ServicosVendas/Details/5
