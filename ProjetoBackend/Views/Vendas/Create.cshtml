@@ -10,51 +10,69 @@
 
 
 <div class="container text-light">
-    <h2>@ViewData["Title"]</h2>
-    <form asp-action="Create">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-        <input type="hidden" asp-for="NotaFiscal" class="form-control" />
+    @if (vendaAtual == null)
+    {
+        <h5 class="display-5 text-center">Nova Venda</h5>
+        <h5 class="lead text-center">Selecione o cliente para iniciar a venda! </h5>
 
-        <input type="hidden" asp-for="DataVenda" value=@DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss") class="form-control" />
+        <form asp-action="Create" method="post" id="formCliente">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-        <input type="hidden" asp-for="ValorTotal" class="form-control" value="0.00" />
+            <input type="hidden" asp-for="NotaFiscal" class="form-control" />
+
+            <input type="hidden" asp-for="DataVenda" value=@DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss") class="form-control" />
+
+            <input type="hidden" asp-for="ValorTotal" class="form-control" value="0.00" />
 
 
-        <div class="row gap-3">
-            <div class="col -9">
-                <div class="form-group">
-                    <label asp-for="ClienteId" class="control-label"></label>
-                    <select asp-for="ClienteId" class="form-control" asp-items="ViewBag.ClienteId">
-                        @if (vendaAtual != null)
-                        {
-                            <option value=@vendaAtual.ClienteId>@vendaAtual.Cliente.Nome</option>
-                        }
-                    </select>
-                    <span asp-validation-for="ClienteId" class="text-danger"></span>
+
+            <div class="row gap-3">
+                <div class="col">
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        Launch demo modal
+                    </button>
+                </div>
+                <div class="col-9">
+                    <div class="form-group">
+                        <label asp-for="ClienteId" class="control-label"></label>
+                        <select asp-for="ClienteId" id="clienteId"
+                                class="form-control"
+                                asp-items="ViewBag.ClienteId"
+                                onchange="this.form.submit()">
+                            @if (vendaAtual != null)
+                            {
+                                <option value=@vendaAtual.ClienteId>@vendaAtual.Cliente.Nome</option>
+                            }
+                            <option selected>Selecione um Cliente...</option>
+                        </select>
+                        <span asp-validation-for="ClienteId" class="text-danger"></span>
+                    </div>
                 </div>
             </div>
-            <div class="col">
-                <div class="form-group">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                </div>
-            </div>
-        </div>
-    </form>
+        </form>
+    }
+
 
     @if (vendaAtual != null)
     {
-        <div class="row">
+        <div class="row mt-2">
+            <div class="col">
+                <h5 class="display-4 text-center">Nova Venda:<span class="fw-bold">@vendaAtual.NotaFiscal</span> </h5>
+            </div>
+        </div>
+        <div class="row mt-2 mb-3">
             <div class="col-3">
-                <h3>Numero da Venda: @vendaAtual.NotaFiscal</h3>
+                <h6 class="display-6">Cliente: <span class="fw-bold"> @vendaAtual.Cliente.Nome </span></h6>
             </div>
 
-            <div class="col-6">
-                <h3>Data da Venda: @vendaAtual.DataVenda</h3>
+            <div class="col-3">
+                <h6 class="display-6">Data: <span class="fw-bold">@vendaAtual.DataVenda</span></h6>
             </div>
 
             <div class="col-3">
-                <h3>Valor Total: @vendaAtual.ValorTotal</h3>
+                <h6 class="display-6">Valor Total: <span class="fw-bold">@vendaAtual.ValorTotal</span></h6>
             </div>
         </div>
 
@@ -160,56 +178,70 @@
             </div>
         }
 
-    }
 
-    <div id="produtosVenda">
-        <div class="formProdutos">
 
-            <form asp-action="AddServico" method="post">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input name="ServicoId" type="hidden" class="form-control" value=@vendaAtual. />
-                <div class="row">
+        <div id="ServicosVenda">
+            <div class="formProdutos">
 
-                    <div class="col-4">
-                        <div class="form-group">
-                            <label for="ServicoId" class="control-label">Produto</label>
-                            <select name="ProdutoId" class="form-control" asp-items="ViewBag.ServicoId" id="servicoId">
-                                <option>Selecione o Serviço</option>
-                            </select>
+                <form asp-action="AddServico" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input name="VendaIdS" type="hidden" class="form-control" value=@vendaAtual.VendaId />
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="QuantidadeS" class="control-label">Quantidade</label>
+                                <input name="QuantidadeS" id="QuantidadeS" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="ServicoId" class="control-label">Produto</label>
+                                <select name="ServicoId" class="form-control" asp-items="ViewBag.ServicoId" id="servicoId">
+                                    <option>Selecione o Serviço</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label for="ValorServico" class="control-label">R$ Serviço</label>
+                                <input name="ValorServico" id="ValorServico" type="number" step="0.01" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label for="ValorTotalS" class="control-label">R$ Total</label>
+                                <input name="ValorTotalS" id="ValorTotalS" type="number" step="0.01" class="form-control" />
+                            </div>
                         </div>
                     </div>
-                    <div class="col-2">
-                        <div class="form-group">
-                            <label for="ValorServico" class="control-label">R$ Serviço</label>
-                            <input name="ValorServico" id="ValorServico" type="number" step="0.01" class="form-control" />
-                        </div>
-                    </div>
-                    <div class="col-2">
-                        <div class="form-group">
-                            <label for="ValorTotalS" class="control-label">R$ Total</label>
-                            <input name="ValorTotalS" id="ValorTotalP" type="number" step="0.01" class="form-control" />
-                        </div>
-                    </div>
-                    <div class="col-2">
-                        <div class="form-group">
-                            <input type="submit" value="Adicionar" class="btn btn-primary" />
-                        </div>
-                    </div>
-                </div>
-            </form>
 
+                    <div class="row">
+                        <div class="col-10">
+                            <div class="form-group">
+                                <label for="Observacao" class="control-label">Observação</label>
+                                <input name="Observacao" id="Observacao" class="form-control" />
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="form-group">
+                                <input type="submit" value="Adicionar" class="btn btn-primary w-100" />
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
         </div>
 
-    </div>
-
-    @if (servicos != null)
-    {
         <div class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
                         <th>
-                            <span>Venda</span>
+                            <span>Quantidade</span>
                         </th>
                         <th>
                             <span>Serviço</span>
@@ -220,6 +252,7 @@
                         <th>
                             <span>Valor Total</span>
                         </th>
+                        <th>Observação</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -228,13 +261,20 @@
                     {
                         <tr>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Venda.NotaFiscal)
+                                @Html.DisplayFor(modelItem => item.Quantidade)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Servico.Nome)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Servico.ValorServico)
+                                @Html.DisplayFor(modelItem => item.Servicocusto)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ValorTotal)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Observacao)
                             </td>
 
                             <td>
@@ -247,10 +287,53 @@
                 </tbody>
             </table>
         </div>
-    }
 
     }
+</div>
 
+
+<!-- Modal para Seleção de Cliente -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="clienteModalLabel">Selecionar Cliente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="search-container">
+                    <form asp-action="BuscarCliente" method="get" class="d-flex">
+                        <input class="search-input" type="text" name="nome" id="nome" placeholder="Procurar..." />
+                        <button type="button" onclick="" class="btn search-button"><ion-icon name="search"></ion-icon></button>
+                    </form>
+                </div>
+
+
+
+                <table class="table table-hover" id="clienteTable">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clienteTable">
+                        @foreach (var cliente in (List<Cliente>)ViewData["Clientes"])
+                        {
+                            <tr>
+                                <td>@cliente.Nome</td>
+                                <td>@cliente.Email</td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary" onclick="selecionarCliente('@cliente.ClienteId')">Selecionar</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
@@ -258,4 +341,6 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
 
     }
+
+
 }

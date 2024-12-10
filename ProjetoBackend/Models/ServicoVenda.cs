@@ -14,6 +14,10 @@ namespace ProjetoBackend.Models
         [Range(1, int.MaxValue, ErrorMessage = "A quantidade deve ser maior que zero.")]
         public int Quantidade { get; set; }
 
+        [Display(Name = "Observação")]
+        [MaxLength(150)]
+        public string? Observacao { get; set; }
+
         [DataType(DataType.Currency)]
         public decimal Servicocusto { get; set; }
         [DataType(DataType.Currency)]
@@ -21,7 +25,7 @@ namespace ProjetoBackend.Models
 
         [Required(ErrorMessage = "Venda")]
         [Display(Name = "Venda")]
-        public Guid? VendaId { get; set; }
+        public Guid VendaId { get; set; }
         [Display(Name = "Venda")]
         public Venda? Venda { get; set; }
     }

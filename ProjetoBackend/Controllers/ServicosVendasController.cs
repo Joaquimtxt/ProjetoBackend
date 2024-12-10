@@ -84,7 +84,7 @@ namespace ProjetoBackend.Controllers
 
             var servicoVenda = await _context.ServicoVenda
                 .Include(s => s.Servico)
-                .Include(s => s.Venda)
+                .Include(v => v.Venda)
                 .FirstOrDefaultAsync(m => m.ServicoVendaId == id);
             if (servicoVenda == null)
             {
@@ -183,12 +183,17 @@ namespace ProjetoBackend.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index");
         }
 
         private bool ServicoVendaExists(Guid id)
         {
             return _context.ServicoVenda.Any(e => e.ServicoVendaId == id);
+        }
+        public decimal PrecoServico(Guid id)
+        {
+            var servicando = _context.Servicos.Where(s => s.ServicoId == id).FirstOrDefault();
+            return servicando.ValorServico;
         }
     }
 }

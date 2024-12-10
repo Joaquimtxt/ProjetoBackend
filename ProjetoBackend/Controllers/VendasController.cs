@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProjetoBackend.Data;
+using ProjetoBackend.Migrations;
 using ProjetoBackend.Models;
 
 namespace ProjetoBackend.Controllers
@@ -53,12 +54,18 @@ namespace ProjetoBackend.Controllers
             ViewData["vendaAtual"] = vendaAtual;
             ViewData["ClienteId"] = new SelectList(_context.Clientes, "ClienteId", "Nome");
             ViewData["ProdutoId"] = new SelectList(_context.Produtos, "ProdutoId", "Nome");
+            ViewData["ServicoId"] = new SelectList(_context.Servicos, "ServicoId", "Nome");
             List<ItemVenda> itens = null;
+            List<ServicoVenda> servicos = null;
             if (vendaAtual != null)
             {
                 itens = _context.ItensVenda.Where(i => i.VendaId == vendaAtual.VendaId).Include(p => p.Produto).ToList();
+                servicos = _context.ServicoVenda.Where(d => d.VendaId == vendaAtual.VendaId).Include(s => s.Servico).ToList();
             }
             ViewData["listaItens"] = itens;
+            ViewData["listaServicos"] = servicos;
+            List<Cliente> clients = _context.Clientes.ToList();
+            ViewData["Clientes"] = clients;
             return View();
         }
 
@@ -80,14 +87,24 @@ namespace ProjetoBackend.Controllers
 
                 ViewData["ClienteId"] = new SelectList(_context.Clientes, "ClienteId", "Nome", venda.ClienteId);
                 ViewData["ProdutoId"] = new SelectList(_context.Produtos, "ProdutoId", "Nome");
+                ViewData["ServicoId"] = new SelectList(_context.Servicos, "ServicoId", "Nome");
                 List<ItemVenda> itensProdutos = await _context.ItensVenda.Where(i => i.VendaId == venda.VendaId).ToListAsync();
+                List<ServicoVenda> itensServicos = await _context.ServicoVenda.Where(i => i.VendaId == venda.VendaId).ToListAsync();
                 ViewData["listaItens"] = itensProdutos;
+                ViewData["listaServicos"] = itensServicos;
+                List<Cliente> clientes = _context.Clientes.ToList();
+                ViewData["Clientes"] = clientes;
                 return RedirectToAction("Create", new { id = venda.VendaId });
             }
             ViewData["ClienteId"] = new SelectList(_context.Clientes, "ClienteId", "Nome", venda.ClienteId);
             ViewData["ProdutoId"] = new SelectList(_context.Produtos, "ProdutoId", "Nome");
+            ViewData["ServicoId"] = new SelectList(_context.Servicos, "ServicoId", "Nome");
             List<ItemVenda> itens = await _context.ItensVenda.Where(i => i.VendaId == venda.VendaId).Include(p => p.Produto).ToListAsync();
+            List<ServicoVenda> itensServic = await _context.ServicoVenda.Where(i => i.VendaId == venda.VendaId).Include(s => s.Servico).ToListAsync();
             ViewData["listaItens"] = itens;
+            ViewData["listaServicos"] = itensServic; //Aqui o que está dando errado
+            List<Cliente> clients = _context.Clientes.ToList();
+            ViewData["Clientes"] = clients;
             return View("Create", venda);
         }
 
@@ -208,7 +225,54 @@ namespace ProjetoBackend.Controllers
             return RedirectToAction("Create", new { id = VendaId });
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddServico(Guid VendaIdS, Guid ServicoId, int QuantidadeS, string Observacao, decimal ValorServico)
+        {
 
+            var servicos = _context.Servicos.FindAsync(ServicoId).Result;
+            ServicoVenda servicovenda = new ServicoVenda();
+            servicovenda.VendaId = VendaIdS;
+            servicovenda.Quantidade = QuantidadeS;
+            servicovenda.Observacao = Observacao;
+            servicovenda.ServicoId = ServicoId;
+
+            servicovenda.ServicoVendaId = Guid.NewGuid();
+            servicovenda.Servicocusto = ValorServico;
+            servicovenda.ValorTotal = QuantidadeS * ValorServico;
+
+            _context.ServicoVenda.Add(servicovenda);
+            await _context.SaveChangesAsync();
+
+            var venda = _context.Vendas.FindAsync(VendaIdS).Result;
+            venda.ValorTotal += servicovenda.ValorTotal;
+
+
+            _context.Update(venda);
+            await _context.SaveChangesAsync();
+
+            List<ServicoVenda> listaServicos = await _context.ServicoVenda.Where(i => i.VendaId == VendaIdS).Include(p => p.Servico).ToListAsync();
+            ViewData["listaServicos"] = listaServicos;
+            return RedirectToAction("Create", new { id = VendaIdS });
+        }
+
+        public async Task<IActionResult> BuscarClientes(string nome)
+        {
+            List<Cliente> clientes;
+
+            if (string.IsNullOrEmpty(nome))
+            {
+                clientes = _context.Clientes.OrderBy(c => c.Nome).ToList();
+            }
+            else
+            {
+                clientes = await _context.Clientes.Where(c => c.Nome.Contains(nome)).ToListAsync();
+                clientes = clientes.OrderBy(c => c.Nome).ToList();
+            }
+
+            ViewData["Clientes"] = clientes;
+            return PartialView("_ClienteList", clientes.OrderBy(c => c.Nome));
+        }
 
         private bool VendaExists(Guid id)
         {

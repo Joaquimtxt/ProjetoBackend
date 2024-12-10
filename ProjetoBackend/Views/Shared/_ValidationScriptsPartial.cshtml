@@ -25,16 +25,16 @@
       $(document).ready(function () {
         $("#servicoId").change(function () {
             var id = $(this).val();
-            var quantidade = $("#Quantidade").val();
+            var quantidade = $("#QuantidadeS").val();
 
             $.ajax({
-                url: '/ServicoVenda/PrecoProduto',
+                url: '/ServicosVendas/PrecoServico',
                 data: { id: id },
                 dataType: 'json',
                 success: function (data) {
-                    $("#ValorUnitario").val(data);
+                    $("#ValorServico").val(data);
                     var total = parseFloat(data * quantidade);
-                    $("#ValorTotalP").val(total);
+                    $("#ValorTotalS").val(total);
                 },
                 error: function () {
                     alert("Erro ao calcular o preço do produto.");
@@ -83,4 +83,38 @@
         // Atualiza o valor do campo
         input.value = valor;
     }
+
+
+    // function selecionarCliente(id, nome) {
+
+    //     alert(id);
+    //     alert(nome);
+    //     document.getElementById('clienteId').value = id;
+    //     document.getElementById('clienteNome').value = nome;
+    //     new bootstrap.Modal(document.getElementById('clienteModal')).hide();
+    // }
+
+    function selecionarCliente(id) {
+      document.getElementById('clienteId').value = id;
+
+      var form = document.getElementById('formCliente');
+      form.submit();
+
+    }
+
+
+     $(document).ready(function() {
+        $("#nome").on("input", function() {
+            var nome = $(this).val();
+
+            $.ajax({
+                url: "/Vendas/BuscarClientes",
+                data: { nome: nome },
+                type: "GET",
+                success: function(result) {
+                     $("#clienteTable").html(result);;
+                }
+            });
+        });
+    });
 </script>

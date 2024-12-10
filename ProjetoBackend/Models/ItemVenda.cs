@@ -11,11 +11,11 @@ namespace ProjetoBackend.Models
 
         // Propriedades para Produto
         public Guid? ProdutoId { get; set; }  // Pode ser nulo caso seja um serviço
-        public Produto Produto { get; set; }  // Relacionamento com Produto
+        public Produto? Produto { get; set; }  // Relacionamento com Produto
 
         // Propriedades para Serviço
         public Guid? ServicoId { get; set; }  // Pode ser nulo caso seja um produto
-        public Servico Servico { get; set; }  // Relacionamento com Serviço
+        public Servico? Servico { get; set; }  // Relacionamento com Serviço
 
         [Range(1, int.MaxValue, ErrorMessage = "A quantidade deve ser maior que zero.")]
         public int Quantidade { get; set; }
