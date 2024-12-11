@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using ProjetoBackend.Data;
 using ProjetoBackend.Migrations;
 using ProjetoBackend.Models;
+using Rotativa.AspNetCore;
 
 namespace ProjetoBackend.Controllers
 {
@@ -275,6 +276,7 @@ namespace ProjetoBackend.Controllers
             // Retorna apenas o conteúdo da tabela como PartialView
             return PartialView("_ClientesTable", clientes);
         }
+
 
         private bool VendaExists(Guid id)
         {

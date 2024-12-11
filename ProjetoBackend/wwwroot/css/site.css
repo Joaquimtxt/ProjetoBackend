@@ -189,6 +189,26 @@ footer {
     line-height: 20px !important;
 }
 
-center ~ * {
+.h-35 {
+    height: 34% !important;
+}
+
+.h-10 {
+    height: 6% !important;
+}
+
+.h-15 {
+    height: 14% !important;
+}
+
+.principal {
+    height: 100dvh;
+}
+
+.tabela {
+    overflow-y: scroll;
+}
+
+center, center ~ * {
     display: none !important;
 }

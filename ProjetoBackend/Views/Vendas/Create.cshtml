@@ -9,7 +9,7 @@
 }
 
 
-<div class="container text-light">
+<div class="container text-light principal">
 
     @if (vendaAtual == null)
     {
@@ -31,7 +31,7 @@
                 <div class="col">
                     <!-- Button trigger modal -->
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        Launch demo modal
+                        Buscar Clientes
                     </button>
                 </div>
                 <div class="col-9">
@@ -57,239 +57,260 @@
 
     @if (vendaAtual != null)
     {
-        <div class="row mt-2">
-            <div class="col">
-                <h5 class="display-4 text-center">Nova Venda:<span class="fw-bold">@vendaAtual.NotaFiscal</span> </h5>
+
+        <div class="row mt-1 mb-2 h-15">
+            <div class="col-3 border border-1 border-light pt-1 px-4">
+                <img class="img-fluid" src="~/img/jaketa-white.png" />
             </div>
+
+            <div class="col ps-5 border border-1 border-light pt-2">
+                <p class="fs-5 m-0 mb-1">Data: <span class="fw-bold fs-3">@vendaAtual.DataVenda</span></p>
+                <p class="fs-5">Cliente: <span class="fw-bold fs-3"> @vendaAtual.Cliente.Nome </span></p>
+            </div>
+
+            <div class="col-2 border border-1 border-light pt-2">
+                <p class="fs-5 m-0 mb-1 text-center">Venda</p>
+                <p class="text-center"><span class="fw-bold fs-1">@vendaAtual.NotaFiscal</span></p>
+            </div>
+
         </div>
-        <div class="row mt-2 mb-3">
-            <div class="col-3">
-                <h6 class="display-6">Cliente: <span class="fw-bold"> @vendaAtual.Cliente.Nome </span></h6>
-            </div>
 
-            <div class="col-3">
-                <h6 class="display-6">Data: <span class="fw-bold">@vendaAtual.DataVenda</span></h6>
-            </div>
+        <!--
 
-            <div class="col-3">
-                <h6 class="display-6">Valor Total: <span class="fw-bold">@vendaAtual.ValorTotal</span></h6>
-            </div>
-        </div>
+        -->
 
-        <div id="produtosVenda">
-            <div class="formProdutos">
+        <div class="row border border-1 border-light p-3 mb-2 h-35 overflow-auto">
+            <div id="produtosVenda" class="">
+                <div class="row ">
+                    <div class="col-12 mb-3 ">
+                        <p class="lead text-center">Incluir Produtos</p>
+                        <div class="formProdutos">
+                            <form asp-action="AddProduto" method="post">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input name="VendaId" type="hidden" class="form-control" value=@vendaAtual.VendaId />
+                                <div class="row">
 
-                <form asp-action="AddProduto" method="post">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input name="VendaId" type="hidden" class="form-control" value=@vendaAtual.VendaId />
-                    <div class="row">
+                                    <div class="col-2">
+                                        <div class="form-group">
+                                            <input name="Quantidade" id="Quantidade" placeholder="Quantidade" class="form-control" />
+                                        </div>
+                                    </div>
 
-                        <div class="col-2">
-                            <div class="form-group">
-                                <label for="Quantidade" class="control-label">Quantidade</label>
-                                <input name="Quantidade" id="Quantidade" class="form-control" />
-                            </div>
-                        </div>
-
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label for="ProdutoId" class="control-label">Produto</label>
-                                <select name="ProdutoId" class="form-control" asp-items="ViewBag.ProdutoId" id="produtoId">
-                                    <option>Selecione o Produto</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <label for="ValorUnitario" class="control-label">R$ Unitário</label>
-                                <input name="ValorUnitario" id="ValorUnitario" type="number" step="0.01" class="form-control" />
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <label for="ValorTotalP" class="control-label">R$ Total</label>
-                                <input name="ValorTotalP" id="ValorTotalP" type="number" step="0.01" class="form-control" />
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <input type="submit" value="Adicionar" class="btn btn-primary" />
-                            </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <select name="ProdutoId" class="form-control" asp-items="ViewBag.ProdutoId" id="produtoId">
+                                                <option>Selecione o Produto</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="form-group">
+                                            <input name="ValorUnitario" id="ValorUnitario" placeholder="R$ Unitário" type="number" step="0.01" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="form-group">
+                                            <input name="ValorTotalP" id="ValorTotalP" placeholder="R$ Total" type="number" step="0.01" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-1 text-end">
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-primary">Adicionar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                </form>
-
-            </div>
-
-        </div>
-
-        @if (itens != null)
-        {
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>
-                                <span>Venda</span>
-                            </th>
-                            <th>
-                                <span>Produto</span>
-                            </th>
-                            <th>
-                                <span>Quantidade</span>
-                            </th>
-                            <th>
-                                <span>Valor Unitario</span>
-                            </th>
-                            <th>
-                                <span>Valor Total</span>
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in itens)
-                        {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Venda.NotaFiscal)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Produto.Nome)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Quantidade)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.ValorUnitario)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.ValorTotal)
-                                </td>
-                                <td>
-                                    <a asp-action="Edit" asp-route-id="@item.ItemVendaId">Edit</a> |
-                                    <a asp-action="Details" asp-route-id="@item.ItemVendaId">Details</a> |
-                                    <a asp-action="Delete" asp-route-id="@item.ItemVendaId">Delete</a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        }
-
-
-
-        <div id="ServicosVenda">
-            <div class="formProdutos">
-
-                <form asp-action="AddServico" method="post">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input name="VendaIdS" type="hidden" class="form-control" value=@vendaAtual.VendaId />
-
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="QuantidadeS" class="control-label">Quantidade</label>
-                                <input name="QuantidadeS" id="QuantidadeS" class="form-control" />
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label for="ServicoId" class="control-label">Produto</label>
-                                <select name="ServicoId" class="form-control" asp-items="ViewBag.ServicoId" id="servicoId">
-                                    <option>Selecione o Serviço</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            <div class="form-group">
-                                <label for="ValorServico" class="control-label">R$ Serviço</label>
-                                <input name="ValorServico" id="ValorServico" type="number" step="0.01" class="form-control" />
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            <div class="form-group">
-                                <label for="ValorTotalS" class="control-label">R$ Total</label>
-                                <input name="ValorTotalS" id="ValorTotalS" type="number" step="0.01" class="form-control" />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-10">
-                            <div class="form-group">
-                                <label for="Observacao" class="control-label">Observação</label>
-                                <input name="Observacao" id="Observacao" class="form-control" />
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="form-group">
-                                <input type="submit" value="Adicionar" class="btn btn-primary w-100" />
-                            </div>
-                        </div>
-                    </div>
-
-                </form>
-
-            </div>
-        </div>
-
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>
-                            <span>Quantidade</span>
-                        </th>
-                        <th>
-                            <span>Serviço</span>
-                        </th>
-                        <th>
-                            <span>Valor Serviço</span>
-                        </th>
-                        <th>
-                            <span>Valor Total</span>
-                        </th>
-                        <th>Observação</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in servicos)
+                </div>
+                <div class="col-12">
+                    @if (itens != null)
                     {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Quantidade)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Servico.Nome)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Servicocusto)
-                            </td>
-
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ValorTotal)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Observacao)
-                            </td>
-
-                            <td>
-                                <a asp-action="Edit" asp-route-id="@item.ServicoVendaId">Edit</a> |
-                                <a asp-action="Details" asp-route-id="@item.ServicoVendaId">Details</a> |
-                                <a asp-action="Delete" asp-route-id="@item.ServicoVendaId">Delete</a>
-                            </td>
-                        </tr>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <span>Venda</span>
+                                        </th>
+                                        <th>
+                                            <span>Produto</span>
+                                        </th>
+                                        <th>
+                                            <span>Quantidade</span>
+                                        </th>
+                                        <th>
+                                            <span>Valor Unitario</span>
+                                        </th>
+                                        <th>
+                                            <span>Valor Total</span>
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in itens)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Venda.NotaFiscal)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Produto.Nome)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Quantidade)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.ValorUnitario)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.ValorTotal)
+                                            </td>
+                                            <td>
+                                                <a asp-action="Edit" asp-route-id="@item.ItemVendaId">Edit</a> |
+                                                <a asp-action="Details" asp-route-id="@item.ItemVendaId">Details</a> |
+                                                <a asp-action="Delete" asp-route-id="@item.ItemVendaId">Delete</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                     }
-                </tbody>
-            </table>
+                </div>
+            </div>
         </div>
 
+        <div class="row border border-1 border-light p-3 mb-2 h-35 overflow-auto">
+
+            <div id="ServicosVenda" class="">
+                <div class="row">
+                    <div class="col-12 mb-3 ">
+                        <p class="lead text-center">Incluir Serviços</p>
+                        <div class="formProdutos">
+
+                            <form asp-action="AddServico" method="post">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input name="VendaIdS" type="hidden" class="form-control" value=@vendaAtual.VendaId />
+
+                                <div class="row">
+                                    <div class="col-1">
+                                        <div class="form-group">
+                                            <input name="QuantidadeS" id="QuantidadeS" placeholder="Quantidade" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <select name="ServicoId" class="form-control" asp-items="ViewBag.ServicoId" id="servicoId">
+                                                <option>Selecione o Serviço</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <input name="ValorServico" id="ValorServico" placeholder="R$ Serviço" type="number" step="0.01" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <input name="ValorTotalS" id="ValorTotalS" placeholder="R$ Total" type="number" step="0.01" class="form-control" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-3">
+                                        <div class="form-group">
+                                            <input name="Observacao" id="Observacao" placeholder="Observação" class="form-control" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-1">
+                                        <div class="form-group">
+                                            <input type="submit" value="Adicionar" class="btn btn-primary w-100" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <span>Quantidade</span>
+                                    </th>
+                                    <th>
+                                        <span>Serviço</span>
+                                    </th>
+                                    <th>
+                                        <span>Valor Serviço</span>
+                                    </th>
+                                    <th>
+                                        <span>Valor Total</span>
+                                    </th>
+                                    <th>Observação</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in servicos)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Quantidade)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Servico.Nome)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Servicocusto)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ValorTotal)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Observacao)
+                                        </td>
+
+                                        <td>
+                                            <a asp-action="Edit" asp-route-id="@item.ServicoVendaId">Edit</a> |
+                                            <a asp-action="Details" asp-route-id="@item.ServicoVendaId">Details</a> |
+                                            <a asp-action="Delete" asp-route-id="@item.ServicoVendaId">Delete</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="totalVenda">
+            <div class="row border border-1 border-light p-0 h-10">
+                <div class="col-6 pt-3">
+                    <p class="fs-4">
+                        Total da Venda:
+                        <span class="fw-bold">@String.Format(new System.Globalization.CultureInfo("pt-BR"), "{0:C}", vendaAtual.ValorTotal)</span>
+                    </p>
+                </div>
+                <div class="col pt-3">
+                    <button type="button" class="btn btn-outline-light w-100 ">Imprimir</button>
+                </div>
+                <div class="col pt-3">
+                    <a asp-action="Index" class="btn btn-primary w-100">Finalizar Venda</a>
+                </div>
+            </div>
+        </div>
     }
 </div>
+
+
 
 
 <!-- Modal para Seleção de Cliente -->
