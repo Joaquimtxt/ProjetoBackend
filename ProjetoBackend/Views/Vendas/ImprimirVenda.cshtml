@@ -1,0 +1,164 @@
+﻿@model ProjetoBackend.Models.Venda
+
+@{
+    Layout = null; // Remove o layout padrão para impressão
+    Venda vendaAtual = (Venda)ViewData["vendaAtual"];
+    List<ItemVenda> itens = (List<ItemVenda>)ViewData["listaItens"];
+    List<ServicoVenda> servicos = (List<ServicoVenda>)ViewData["listaServicos"];
+}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impressão de Venda</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            width: 21cm;
+            height: 29.7cm;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid black;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+            .header img {
+                max-height: 80px;
+            }
+
+        .details {
+            margin-bottom: 20px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+            .table th, .table td {
+                border: 1px solid black;
+                padding: 8px;
+                text-align: left;
+            }
+
+            .table th {
+                background-color: #f2f2f2;
+            }
+
+        .total {
+            text-align: right;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="~/img/jaketa-white.png" alt="Logo">
+            <div>
+                <p><strong>Data:</strong> @vendaAtual.DataVenda</p>
+                <p><strong>Nota Fiscal:</strong> @vendaAtual.NotaFiscal</p>
+            </div>
+        </div>
+
+        <div class="details">
+            <p><strong>Cliente:</strong> @vendaAtual.Cliente.Nome</p>
+            <p><strong>Contato:</strong> @vendaAtual.Cliente.Email</p>
+        </div>
+
+        <h3>Produtos</h3>
+        @if (itens != null && itens.Count > 0)
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th>Quantidade</th>
+                        <th>Valor Unitário</th>
+                        <th>Valor Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in itens)
+                    {
+                        <tr>
+                            <td>@item.Produto.Nome</td>
+                            <td>@item.Quantidade</td>
+                            <td>@String.Format("{0:C}", item.ValorUnitario)</td>
+                            <td>@String.Format("{0:C}", item.ValorTotal)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>Nenhum produto adicionado.</p>
+        }
+
+        <h3>Serviços</h3>
+        @if (servicos != null && servicos.Count > 0)
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Serviço</th>
+                        <th>Quantidade</th>
+                        <th>Valor Serviço</th>
+                        <th>Observação</th>
+                        <th>Valor Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var servico in servicos)
+                    {
+                        <tr>
+                            <td>@servico.Servico.Nome</td>
+                            <td>@servico.Quantidade</td>
+                            <td>@String.Format("{0:C}", servico.Servicocusto)</td>
+                            <td>@servico.Observacao</td>
+                            <td>@String.Format("{0:C}", servico.ValorTotal)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>Nenhum serviço adicionado.</p>
+        }
+
+        <div class="total">
+            <p>Total da Venda: @String.Format(new System.Globalization.CultureInfo("pt-BR"), "{0:C}", vendaAtual.ValorTotal)</p>
+        </div>
+
+
+    </div>
+
+
+    <script>
+        window.onload = function () {
+            window.print();
+        };
+    </script>
+
+</body>
+
+
+</html>

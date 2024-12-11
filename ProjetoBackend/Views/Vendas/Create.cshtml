@@ -98,11 +98,16 @@
 
                                     <div class="col">
                                         <div class="form-group">
-                                            <select name="ProdutoId" class="form-control" asp-items="ViewBag.ProdutoId" id="produtoId">
-                                                <option>Selecione o Produto</option>
-                                            </select>
+                                            <input class="form-control" list="produtoDatalist" id="produtoInput" name="ProdutoId" placeholder="Digite para buscar...">
+                                            <datalist id="produtoDatalist">
+                                                @foreach (var produto in ViewBag.ProdutoId)
+                                                {
+                                                    <option value="@produto.Text">@produto.Text</option>
+                                                }
+                                            </datalist>
                                         </div>
                                     </div>
+
                                     <div class="col-2">
                                         <div class="form-group">
                                             <input name="ValorUnitario" id="ValorUnitario" placeholder="R$ Unitário" type="number" step="0.01" class="form-control" />
@@ -202,9 +207,13 @@
                                     </div>
                                     <div class="col">
                                         <div class="form-group">
-                                            <select name="ServicoId" class="form-control" asp-items="ViewBag.ServicoId" id="servicoId">
-                                                <option>Selecione o Serviço</option>
-                                            </select>
+                                            <input class="form-control" list="servicoDatalist" id="servicoInput" name="ServicoId" placeholder="Digite para buscar...">
+                                            <datalist id="servicoDatalist">
+                                                @foreach (var servico in ViewBag.ServicoId)
+                                                {
+                                                    <option value="@servico.Text">@servico.Text</option>
+                                                }
+                                            </datalist>
                                         </div>
                                     </div>
                                     <div class="col">
@@ -300,7 +309,20 @@
                     </p>
                 </div>
                 <div class="col pt-3">
-                    <button type="button" class="btn btn-outline-light w-100 ">Imprimir</button>
+                    <button type="button" onclick="imprimirVenda('@vendaAtual.VendaId')" class="btn btn-outline-light w-100">Imprimir</button>
+
+                    <script>
+                        function imprimirVenda(id) {
+                            // URL da PartialView que será renderizada
+                            var url = '/Vendas/ImprimirVenda/' + id ; // Substitua pelo caminho correto na sua aplicação
+                                            var novaJanela = window.open(
+                            url,
+                            '_blank',
+                            'toolbar=no,scrollbars=yes,resizable=yes,top=100,left=100,width=1024,height=800'
+                        );
+                        }
+                    </script>
+
                 </div>
                 <div class="col pt-3">
                     <a asp-action="Index" class="btn btn-primary w-100">Finalizar Venda</a>

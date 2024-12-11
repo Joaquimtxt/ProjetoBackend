@@ -277,6 +277,29 @@ namespace ProjetoBackend.Controllers
             return PartialView("_ClientesTable", clientes);
         }
 
+        [HttpGet, ActionName("ImprimirVenda")]
+        public IActionResult ImprimirVenda(Guid? id)
+        {
+
+            Venda vendaAtual = _context.Vendas.Where(v => v.VendaId == id).Include(c => c.Cliente).FirstOrDefaultAsync().Result;
+            ViewData["vendaAtual"] = vendaAtual;
+            ViewData["ClienteId"] = new SelectList(_context.Clientes, "ClienteId", "Nome");
+            ViewData["ProdutoId"] = new SelectList(_context.Produtos, "ProdutoId", "Nome");
+            ViewData["ServicoId"] = new SelectList(_context.Servicos, "ServicoId", "Nome");
+            List<ItemVenda> itens = null;
+            List<ServicoVenda> servicos = null;
+            if (vendaAtual != null)
+            {
+                itens = _context.ItensVenda.Where(i => i.VendaId == vendaAtual.VendaId).Include(p => p.Produto).ToList();
+                servicos = _context.ServicoVenda.Where(d => d.VendaId == vendaAtual.VendaId).Include(s => s.Servico).ToList();
+            }
+            ViewData["listaItens"] = itens;
+            ViewData["listaServicos"] = servicos;
+            List<Cliente> clients = _context.Clientes.ToList();
+            ViewData["Clientes"] = clients;
+            return View(vendaAtual);
+        }
+
 
         private bool VendaExists(Guid id)
         {
