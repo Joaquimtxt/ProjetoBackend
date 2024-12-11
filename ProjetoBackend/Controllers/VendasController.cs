@@ -262,16 +262,18 @@ namespace ProjetoBackend.Controllers
 
             if (string.IsNullOrEmpty(nome))
             {
-                clientes = _context.Clientes.OrderBy(c => c.Nome).ToList();
+                clientes = await _context.Clientes.OrderBy(c => c.Nome).ToListAsync();
             }
             else
             {
-                clientes = await _context.Clientes.Where(c => c.Nome.Contains(nome)).ToListAsync();
-                clientes = clientes.OrderBy(c => c.Nome).ToList();
+                clientes = await _context.Clientes
+                                          .Where(c => c.Nome.Contains(nome))
+                                          .OrderBy(c => c.Nome)
+                                          .ToListAsync();
             }
 
-            ViewData["Clientes"] = clientes;
-            return PartialView("_ClienteList", clientes.OrderBy(c => c.Nome));
+            // Retorna apenas o conteúdo da tabela como PartialView
+            return PartialView("_ClientesTable", clientes);
         }
 
         private bool VendaExists(Guid id)

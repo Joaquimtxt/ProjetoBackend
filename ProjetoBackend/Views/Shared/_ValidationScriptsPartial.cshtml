@@ -95,26 +95,59 @@
     // }
 
     function selecionarCliente(id) {
-      document.getElementById('clienteId').value = id;
+        // Define o valor no campo de input
+        document.getElementById('clienteId').value = id;
 
-      var form = document.getElementById('formCliente');
-      form.submit();
+        // Seleciona todos os botões com a classe btn-selecionar e os desativa
+        const botoes = document.querySelectorAll('.btn-selecionar');
+        botoes.forEach(function(botao) {
+            botao.disabled = true; // Desativa o botão
+        });
 
+        // Submete o formulário
+        var form = document.getElementById('formCliente');
+        form.submit();
     }
 
 
-     $(document).ready(function() {
-        $("#nome").on("input", function() {
-            var nome = $(this).val();
+    //  $(document).ready(function() {
+    //     $("#nome").on("input", function() {
+    //         var nome = $(this).val();
+
+    //         $.ajax({
+    //             url: "/Vendas/BuscarClientes",
+    //             data: { nome: nome },
+    //             type: "GET",
+    //             success: function(result) {
+    //                  $("#clienteTable").html(result);;
+    //             }
+    //         });
+    //     });
+    // });
+
+
+
+    $(document).ready(function () {
+        // Evento de busca
+        $('#btn-buscar-cliente').on('click', function () {
+            const nome = $('#nome').val();
 
             $.ajax({
-                url: "/Vendas/BuscarClientes",
+                url: '/Vendas/BuscarClientes', // Substitua "ControllerName" pelo nome do seu controlador
+                type: 'GET',
                 data: { nome: nome },
-                type: "GET",
-                success: function(result) {
-                     $("#clienteTable").html(result);;
+                success: function (data) {
+                    // Atualiza apenas o corpo da tabela
+                    $('#clienteTableBody').html(data);
+                },
+                error: function () {
+                    alert('Erro ao buscar clientes.');
                 }
             });
         });
+
     });
+
+
+
 </script>

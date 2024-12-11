@@ -20,10 +20,13 @@ namespace ProjetoBackend.Controllers
         }
 
         // GET: ItensCompras
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(Guid? id)
         {
-            var applicationDbContext = _context.ItensCompra.Include(i => i.Compra).Include(i => i.Produto);
-            return View(await applicationDbContext.ToListAsync());
+            var listaCompras = await _context.ItensCompra.Include(i => i.Produto).Include(i => i.Compra).ToListAsync();
+            listaCompras = listaCompras.Where(i => i.CompraId == id).ToList();
+            ViewData["idCompraAtual"] = id;
+            return View("Index", listaCompras);
+
         }
 
         // GET: ItensCompras/Details/5
@@ -59,17 +62,36 @@ namespace ProjetoBackend.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ItemCompraId,CompraId,ProdutoId,Quantidade")] ItemCompra itemCompra)
+        public async Task<IActionResult> Create([Bind("ItemCompraId,CompraId,ProdutoId,Quantidade,ValorUnitario,ValorTotal")] ItemCompra itemCompra)
         {
             if (ModelState.IsValid)
             {
+                if (itemCompra.ProdutoId != Guid.Empty)
+                {
+                    var produto = await _context.Produtos.FindAsync(itemCompra.ProdutoId);
+                    if (produto != null)
+                    {
+                        itemCompra.ValorUnitario = produto.Preco;
+                        itemCompra.ValorTotal = itemCompra.Quantidade * itemCompra.ValorUnitario;
+                    }
+                }
+
+                //Atribui um novo ID para o item da venda
                 itemCompra.ItemCompraId = Guid.NewGuid();
                 _context.Add(itemCompra);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                // Atualiza o valor total da compra
+                var compra = await _context.Vendas.FindAsync(itemCompra.CompraId);
+                compra.ValorTotal = await _context.ItensCompra
+                    .Where(i => i.CompraId == itemCompra.CompraId)
+                    .SumAsync(i => i.ValorTotal);
+
+                _context.Update(compra);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Index), new { id = itemCompra.CompraId });
             }
-            ViewData["CompraId"] = new SelectList(_context.Compras, "CompraId", "CompraId", itemCompra.CompraId);
-            ViewData["ProdutoId"] = new SelectList(_context.Produtos, "ProdutoId", "Nome", itemCompra.ProdutoId);
             return View(itemCompra);
         }
 

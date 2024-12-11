@@ -302,13 +302,13 @@
             </div>
             <div class="modal-body">
                 <div class="search-container">
-                    <form asp-action="BuscarCliente" method="get" class="d-flex">
+                    <form id="form-busca-cliente" class="d-flex">
                         <input class="search-input" type="text" name="nome" id="nome" placeholder="Procurar..." />
-                        <button type="button" onclick="" class="btn search-button"><ion-icon name="search"></ion-icon></button>
+                        <button type="button" id="btn-buscar-cliente" class="btn search-button">
+                            <ion-icon name="search"></ion-icon>
+                        </button>
                     </form>
                 </div>
-
-
 
                 <table class="table table-hover" id="clienteTable">
                     <thead>
@@ -318,24 +318,14 @@
                             <th>Ação</th>
                         </tr>
                     </thead>
-                    <tbody id="clienteTable">
-                        @foreach (var cliente in (List<Cliente>)ViewData["Clientes"])
-                        {
-                            <tr>
-                                <td>@cliente.Nome</td>
-                                <td>@cliente.Email</td>
-                                <td>
-                                    <button class="btn btn-sm btn-primary" onclick="selecionarCliente('@cliente.ClienteId')">Selecionar</button>
-                                </td>
-                            </tr>
-                        }
+                    <tbody id="clienteTableBody">
+                        <!-- Inicialmente vazio, preenchido via AJAX -->
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 </div>
-
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

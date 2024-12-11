@@ -6,14 +6,28 @@ namespace ProjetoBackend.Models
     public class Compra
     {
         public Guid CompraId { get; set; }
-        [Required(ErrorMessage = "Fornecedor")]
-        [Display(Name = "Fornecedor")]
+
+        public int? NotaFiscal { get; set; } = 0;
+
+        [Required(ErrorMessage = "É necessário informar o Fornecedor")]
+        [Display(Name = "Cliente")]
         public Guid FornecedorId { get; set; }
-        [Display(Name = "Fornecedor")]
         public Fornecedor? Fornecedor { get; set; }
+
         [Display(Name = "Data da Compra")]
         public DateTime? DataCompra { get; set; } = DateTime.Now;
-        public double? ValorTotal { get; set; } = 0;
 
+        [Display(Name = "Valor Total")]
+        public decimal? ValorTotal { get; set; } = 0;
+
+        // Propriedades de navegação
+        public ICollection<ItemCompra> ItensCompra { get; set; } = new List<ItemCompra>();
+        public decimal CalcularValorTotal()
+        {
+            decimal totalItens = ItensCompra.Sum(i => i.ValorTotal); ;
+            return totalItens;
+        }
     }
+
 }
+
