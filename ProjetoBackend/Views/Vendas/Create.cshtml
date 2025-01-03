@@ -30,7 +30,7 @@
             <div class="row gap-3">
                 <div class="col">
                     <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <button type="button" class="btn btn-adicionar" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         Buscar Clientes
                     </button>
                 </div>
@@ -120,7 +120,7 @@
                                     </div>
                                     <div class="col-1 text-end">
                                         <div class="form-group">
-                                            <button type="submit" class="btn btn-primary">Adicionar</button>
+                                            <button type="submit" class="btn btn-adicionar">Adicionar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -132,7 +132,7 @@
                     @if (itens != null)
                     {
                         <div class="table-responsive">
-                            <table class="table">
+                            <table class="table table-dark">
                                 <thead>
                                     <tr>
                                         <th>
@@ -173,9 +173,7 @@
                                                 @Html.DisplayFor(modelItem => item.ValorTotal)
                                             </td>
                                             <td>
-                                                <a asp-action="Edit" asp-route-id="@item.ItemVendaId">Edit</a> |
-                                                <a asp-action="Details" asp-route-id="@item.ItemVendaId">Details</a> |
-                                                <a asp-action="Delete" asp-route-id="@item.ItemVendaId">Delete</a>
+                                                <a asp-action="Delete" asp-route-id="@item.ItemVendaId"><ion-icon class="btn btn-outline-danger" name="trash-bin-outline"></ion-icon></a>
                                             </td>
                                         </tr>
                                     }
@@ -235,7 +233,7 @@
 
                                     <div class="col-1">
                                         <div class="form-group">
-                                            <input type="submit" value="Adicionar" class="btn btn-primary w-100" />
+                                            <input type="submit" value="Adicionar" class="btn btn-adicionar w-100" />
                                         </div>
                                     </div>
                                 </div>
@@ -247,7 +245,7 @@
                 </div>
                 <div class="col-12">
                     <div class="table-responsive">
-                        <table class="table">
+                        <table class="table table-dark">
                             <thead>
                                 <tr>
                                     <th>

@@ -21,6 +21,7 @@ namespace ProjetoBackend.Controllers
             _context = context;
         }
 
+
         // GET: Vendas
         public async Task<IActionResult> Index()
         {
@@ -46,6 +47,7 @@ namespace ProjetoBackend.Controllers
 
             return View(venda);
         }
+
 
         // GET: Vendas/Create
         public IActionResult Create(Guid? id)
@@ -199,10 +201,10 @@ namespace ProjetoBackend.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddProduto(Guid VendaId, Guid ProdutoId, int Quantidade)
+        public async Task<IActionResult> AddProduto(Guid VendaId, Guid ProdutoId, int Quantidade, Produto? produto)
         {
 
-            var produto = _context.Produtos.FindAsync(ProdutoId).Result;
+            var produtos = _context.Produtos.FindAsync(ProdutoId);
             ItemVenda itemVenda = new ItemVenda();
             itemVenda.VendaId = VendaId;
             itemVenda.Quantidade = Quantidade;
@@ -215,7 +217,7 @@ namespace ProjetoBackend.Controllers
             _context.ItensVenda.Add(itemVenda);
             await _context.SaveChangesAsync();
 
-            var venda = _context.Vendas.FindAsync(VendaId).Result;
+            var venda = await _context.Vendas.FindAsync(VendaId);
             venda.ValorTotal += itemVenda.ValorTotal;
 
             _context.Update(venda);
