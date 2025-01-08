@@ -201,17 +201,21 @@ namespace ProjetoBackend.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddProduto(Guid VendaId, Guid ProdutoId, int Quantidade, Produto? produto)
+        public async Task<IActionResult> AddProduto(Guid VendaId, Guid ProdutoId, int Quantidade)
         {
+            var produto = await _context.Produtos.FindAsync(ProdutoId); // Busca o produto pelo ID
 
-            var produtos = _context.Produtos.FindAsync(ProdutoId);
+            if (produto == null)
+            {
+                return NotFound(); // Retorna NotFound se o produto não for encontrado
+            }
+
             ItemVenda itemVenda = new ItemVenda();
             itemVenda.VendaId = VendaId;
             itemVenda.Quantidade = Quantidade;
             itemVenda.ProdutoId = ProdutoId;
-
             itemVenda.ItemVendaId = Guid.NewGuid();
-            itemVenda.ValorUnitario = produto.Preco;
+            itemVenda.ValorUnitario = produto.Preco; // Agora produto não será null
             itemVenda.ValorTotal = Quantidade * produto.Preco;
 
             _context.ItensVenda.Add(itemVenda);
