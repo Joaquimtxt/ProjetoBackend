@@ -102,9 +102,10 @@
                                             <datalist id="produtoDatalist">
                                                 @foreach (var produto in ViewBag.ProdutoId)
                                                 {
-                                                    <option value="@produto.Text">@produto.Text</option>
+                                                    <option value="@produto.Value">@produto.Text</option>
                                                 }
                                             </datalist>
+                    
                                         </div>
                                     </div>
 
@@ -205,6 +206,8 @@
                                     </div>
                                     <div class="col">
                                         <div class="form-group">
+
+
                                             <input class="form-control" list="servicoDatalist" id="servicoInput" name="ServicoId" placeholder="Digite para buscar...">
                                             <datalist id="servicoDatalist">
                                                 @foreach (var servico in ViewBag.ServicoId)
