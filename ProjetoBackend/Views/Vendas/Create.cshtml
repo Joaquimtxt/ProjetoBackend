@@ -111,12 +111,12 @@
 
                                     <div class="col-2">
                                         <div class="form-group">
-                                            <input name="ValorUnitario" id="ValorUnitario" placeholder="R$ Unitário" type="number" step="0.01" class="form-control" />
+                                            <input name="ValorUnitario" id="ValorUnitario" placeholder="R$ Unitário" type="number" step="0.01" class="form-control" readonly />
                                         </div>
                                     </div>
                                     <div class="col-2">
                                         <div class="form-group">
-                                            <input name="ValorTotalP" id="ValorTotalP" placeholder="R$ Total" type="number" step="0.01" class="form-control" />
+                                            <input name="ValorTotalP" id="ValorTotalP" placeholder="R$ Total" type="number" step="0.01" class="form-control" readonly />
                                         </div>
                                     </div>
                                     <div class="col-1 text-end">
@@ -212,7 +212,7 @@
                                             <datalist id="servicoDatalist">
                                                 @foreach (var servico in ViewBag.ServicoId)
                                                 {
-                                                    <option value="@servico.Text">@servico.Text</option>
+                                                    <option value="@servico.Value">@servico.Text</option>
                                                 }
                                             </datalist>
                                         </div>
