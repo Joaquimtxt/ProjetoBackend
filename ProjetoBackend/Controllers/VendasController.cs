@@ -29,6 +29,35 @@ namespace ProjetoBackend.Controllers
             return View(await applicationDbContext.OrderBy(v => v.NotaFiscal).ToListAsync());
         }
 
+        public async Task<IActionResult> Search(string searchString)
+        {
+            if (string.IsNullOrWhiteSpace(searchString))
+            {
+                // Se o campo de pesquisa estiver vazio, redireciona para o Index com todas as vendas
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Normaliza o termo de pesquisa (removendo acentos e ignorando letras maiúsculas/minúsculas)
+            var nomeNormalizado = searchString.RemoverAcentos().ToLower();
+
+            // Carrega as vendas do banco de dados, incluindo o cliente
+            var vendas = await _context.Vendas
+                .Include(v => v.Cliente)
+                .ToListAsync();
+
+            // Filtra as vendas removendo acentos e ignorando maiúsculas/minúsculas
+            var vendasFiltradas = vendas
+                .Where(v => v.Cliente.Nome.RemoverAcentos().ToLower().Contains(nomeNormalizado))
+                .OrderByDescending(v => v.DataVenda)
+                .ToList();
+
+            // Adiciona o termo de pesquisa na ViewData para exibição
+            ViewData["CurrentFilter"] = searchString;
+
+            // Retorna a view Index com as vendas filtradas
+            return View("Index", vendasFiltradas);
+        }
+
         // GET: Vendas/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
