@@ -198,6 +198,61 @@ namespace ProjetoBackend.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteProd(Guid id)
+        {
+            // Busca o item pelo ID
+            var item = await _context.ItensVenda.FindAsync(id);
+
+            if (item == null)
+            {
+                return NotFound(); // Retorna erro 404 se o item não for encontrado
+            }
+
+            // Subtrai o valor do item do total da venda
+            var venda = await _context.Vendas.FindAsync(item.VendaId);
+            if (venda != null)
+            {
+                venda.ValorTotal -= item.ValorTotal;
+                _context.Vendas.Update(venda);
+            }
+
+            // Remove o item da venda
+            _context.ItensVenda.Remove(item);
+            await _context.SaveChangesAsync();
+
+            // Redireciona de volta ao método Create com o ID da venda
+            return RedirectToAction("Create", new { id = item.VendaId });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteItem(Guid id)
+        {
+            // Busca o item pelo ID
+            var item = await _context.ServicoVenda.FindAsync(id);
+
+            if (item == null)
+            {
+                return NotFound(); // Retorna erro 404 se o item não for encontrado
+            }
+
+            // Subtrai o valor do item do total da venda
+            var venda = await _context.Vendas.FindAsync(item.VendaId);
+            if (venda != null)
+            {
+                venda.ValorTotal -= item.ValorTotal;
+                _context.Vendas.Update(venda);
+            }
+
+            // Remove o item da venda
+            _context.ServicoVenda.Remove(item);
+            await _context.SaveChangesAsync();
+
+            // Redireciona de volta ao método Create com o ID da venda
+            return RedirectToAction("Create", new { id = item.VendaId });
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -234,7 +289,7 @@ namespace ProjetoBackend.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddServico(Guid VendaIdS, Guid ServicoId, int QuantidadeS, string Observacao, decimal ValorServico)
+        public async Task<IActionResult> AddServico(Guid VendaIdS, Guid ServicoId, int QuantidadeS, string Observacao)
         {
 
             var servicos = _context.Servicos.FindAsync(ServicoId).Result;
@@ -245,8 +300,8 @@ namespace ProjetoBackend.Controllers
             servicovenda.ServicoId = ServicoId;
 
             servicovenda.ServicoVendaId = Guid.NewGuid();
-            servicovenda.Servicocusto = ValorServico;
-            servicovenda.ValorTotal = QuantidadeS * ValorServico;
+            servicovenda.Servicocusto = servicos.ValorServico;
+            servicovenda.ValorTotal = QuantidadeS * servicos.ValorServico;
 
             _context.ServicoVenda.Add(servicovenda);
             await _context.SaveChangesAsync();

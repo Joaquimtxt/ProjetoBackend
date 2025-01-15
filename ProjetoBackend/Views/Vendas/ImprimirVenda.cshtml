@@ -65,6 +65,24 @@
             font-weight: bold;
             margin-top: 20px;
         }
+
+        .assinaturas-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+        }
+
+        .assinatura {
+            text-align: center;
+            width: 45%; /* Deixa espaço proporcional entre as duas assinaturas */
+        }
+
+        .linha-assinatura {
+            border-top: 1px solid black;
+            margin-top: 50px;
+            width: 100%;
+            height: 1px;
+        }
     </style>
 </head>
 <body>
@@ -79,7 +97,7 @@
 
         <div class="details">
             <p><strong>Cliente:</strong> @vendaAtual.Cliente.Nome</p>
-            <p><strong>Contato:</strong> @vendaAtual.Cliente.Email</p>
+            <p><strong>Contato:</strong> @vendaAtual.Cliente.Celular</p>
         </div>
 
         <h3>Produtos</h3>
@@ -143,11 +161,16 @@
         {
             <p>Nenhum serviço adicionado.</p>
         }
-
-        <div class="total">
-            <p>Total da Venda: @String.Format(new System.Globalization.CultureInfo("pt-BR"), "{0:C}", vendaAtual.ValorTotal)</p>
+        <div class="assinaturas-container">
+            <div class="assinatura">
+                <p>Assinatura do Vendedor</p>
+                <div class="linha-assinatura"></div>
+            </div>
+            <div class="assinatura">
+                <p>Assinatura do Cliente</p>
+                <div class="linha-assinatura"></div>
+            </div>
         </div>
-
 
     </div>
 

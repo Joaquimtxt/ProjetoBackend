@@ -174,7 +174,11 @@
                                                 @Html.DisplayFor(modelItem => item.ValorTotal)
                                             </td>
                                             <td>
-                                                <a asp-action="Delete" asp-route-id="@item.ItemVendaId"><ion-icon class="btn btn-outline-danger" name="trash-bin-outline"></ion-icon></a>
+                                                <form asp-action="DeleteProd" asp-route-id="@item.ItemVendaId" method="post" style="display:inline;">
+                                                    <button type="submit" class="btn btn-outline-danger">
+                                                        <ion-icon name="trash-bin-outline"></ion-icon>
+                                                    </button>
+                                                </form>
                                             </td>
                                         </tr>
                                     }
@@ -199,7 +203,7 @@
                                 <input name="VendaIdS" type="hidden" class="form-control" value=@vendaAtual.VendaId />
 
                                 <div class="row">
-                                    <div class="col-1">
+                                    <div class="col-2">
                                         <div class="form-group">
                                             <input name="QuantidadeS" id="QuantidadeS" placeholder="Quantidade" class="form-control" />
                                         </div>
@@ -217,30 +221,33 @@
                                             </datalist>
                                         </div>
                                     </div>
-                                    <div class="col">
+
+                                    <div class="col-3">
                                         <div class="form-group">
                                             <input name="ValorServico" id="ValorServico" placeholder="R$ Serviço" type="number" step="0.01" class="form-control" />
                                         </div>
                                     </div>
-                                    <div class="col">
+                                    <div class="col-3">
                                         <div class="form-group">
                                             <input name="ValorTotalS" id="ValorTotalS" placeholder="R$ Total" type="number" step="0.01" class="form-control" />
                                         </div>
                                     </div>
 
-                                    <div class="col-3">
+
+                                    <div class="row mt-2 ms-4 justify-content-center align-content-center">
+                                    <div class="col-7">
                                         <div class="form-group">
                                             <input name="Observacao" id="Observacao" placeholder="Observação" class="form-control" />
                                         </div>
                                     </div>
 
-                                    <div class="col-1">
+                                    <div class="col-3">
                                         <div class="form-group">
                                             <input type="submit" value="Adicionar" class="btn btn-adicionar w-100" />
                                         </div>
                                     </div>
                                 </div>
-
+                                </div>
                             </form>
 
                         </div>
@@ -289,9 +296,11 @@
                                         </td>
 
                                         <td>
-                                            <a asp-action="Edit" asp-route-id="@item.ServicoVendaId">Edit</a> |
-                                            <a asp-action="Details" asp-route-id="@item.ServicoVendaId">Details</a> |
-                                            <a asp-action="Delete" asp-route-id="@item.ServicoVendaId">Delete</a>
+                                            <form asp-action="DeleteItem" asp-route-id="@item.ServicoVendaId" method="post" style="display:inline;">
+                                                <button type="submit" class="btn btn-outline-danger">
+                                                    <ion-icon name="trash-bin-outline"></ion-icon>
+                                                </button>
+                                            </form>
                                         </td>
                                     </tr>
                                 }
