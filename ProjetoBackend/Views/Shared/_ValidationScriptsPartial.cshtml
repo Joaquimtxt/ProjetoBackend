@@ -132,6 +132,43 @@
         });
 
     });
+     function selecionarFornecedor(id) {
+        // Define o valor no campo de input
+        document.getElementById('fornecedorId').value = id;
+
+        // Seleciona todos os botões com a classe btn-selecionar e os desativa
+        const botoes = document.querySelectorAll('.btn-selecionar');
+        botoes.forEach(function(botao) {
+            botao.disabled = true; // Desativa o botão
+        });
+
+        // Submete o formulário
+        var form = document.getElementById('formFornecedor');
+        form.submit();
+    }
+
+
+
+    $(document).ready(function () {
+        // Evento de busca
+        $('#btn-buscar-fornecedor').on('click', function () {
+            const nome = $('#nome').val();
+
+            $.ajax({
+                url: '/Compras/BuscarFornecedores', // Substitua "ControllerName" pelo nome do seu controlador
+                type: 'GET',
+                data: { nome: nome },
+                success: function (data) {
+                    // Atualiza apenas o corpo da tabela
+                    $('#fornecedorTableBody').html(data);
+                },
+                error: function () {
+                    alert('Erro ao buscar clientes.');
+                }
+            });
+        });
+
+    });
 
 
 

@@ -1,0 +1,12 @@
+﻿@model List<Fornecedor>
+
+@foreach (var fornecedor in Model)
+{
+    <tr>
+        <td>@fornecedor.Nome</td>
+        <td>@fornecedor.Email</td>
+        <td>
+            <button class="btn btn-sm btn-primary btn-selecionar" onclick="selecionarCliente('@cliente.ClienteId')">Selecionar</button>
+        </td>
+    </tr>
+}

@@ -254,7 +254,6 @@ namespace ProjetoBackend.Controllers
             // Redireciona de volta ao método Create com o ID da venda
             return RedirectToAction("Create", new { id = item.VendaId });
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteItem(Guid id)

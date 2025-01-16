@@ -22,7 +22,37 @@ namespace ProjetoBackend.Controllers
         // GET: Compras
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Compras.ToListAsync());
+            var applicationDbContext = _context.Compras.Include(v => v.Fornecedor);
+            return View(await applicationDbContext.OrderBy(v => v.NotaFiscal).ToListAsync());
+        }
+
+        public async Task<IActionResult> Search(string searchString)
+        {
+            if (string.IsNullOrWhiteSpace(searchString))
+            {
+                // Se o campo de pesquisa estiver vazio, redireciona para o Index com todas as vendas
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Normaliza o termo de pesquisa (removendo acentos e ignorando letras maiúsculas/minúsculas)
+            var nomeNormalizado = searchString.RemoverAcentos().ToLower();
+
+            // Carrega as compras do banco de dados, incluindo o cliente
+            var compras = await _context.Compras
+                .Include(v => v.Fornecedor)
+                .ToListAsync();
+
+            // Filtra as vendas removendo acentos e ignorando maiúsculas/minúsculas
+            var comprasFiltradas = compras
+                .Where(v => v.Fornecedor.Nome.RemoverAcentos().ToLower().Contains(nomeNormalizado))
+                .OrderByDescending(v => v.DataCompra)
+                .ToList();
+
+            // Adiciona o termo de pesquisa na ViewData para exibição
+            ViewData["CurrentFilter"] = searchString;
+
+            // Retorna a view Index com as vendas filtradas
+            return View("Index", comprasFiltradas);
         }
 
         // GET: Compras/Details/5
@@ -52,18 +82,56 @@ namespace ProjetoBackend.Controllers
         // POST: Compras/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        public IActionResult Create(Guid? id)
+        {
+
+            Compra compraAtual = _context.Compras.Where(v => v.CompraId == id).Include(c => c.Fornecedor).FirstOrDefaultAsync().Result;
+            ViewData["compraAtual"] = compraAtual;
+            ViewData["FornecedorId"] = new SelectList(_context.Fornecedores, "ClienteId", "Nome");
+            ViewData["ProdutoId"] = new SelectList(_context.Produtos, "ProdutoId", "Nome");
+            List<ItemCompra> itens = null;
+            if (compraAtual != null)
+            {
+                itens = _context.ItensCompra.Where(i => i.CompraId == compraAtual.CompraId).Include(p => p.Produto).ToList();
+            }
+            ViewData["listaItens"] = itens;
+       
+            List<Fornecedor> supplier = _context.Fornecedores.ToList();
+            ViewData["Fornecedor"] = supplier;
+            return View();
+        }
+
+        // POST: Compras/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CompraId,FornecedorId,DataCompra,ValorTotal")] Compra compra)
+        public async Task<IActionResult> Create([Bind("CompraId,NotaFiscal,FornecedorId,DataCompra,ValorTotal")] Compra compra)
         {
             if (ModelState.IsValid)
             {
+                // Auto incremento da nota fiscal
+                compra.NotaFiscal = _context.Vendas.Count() + 1;
+                compra.DataCompra = DateTime.Now;
                 compra.CompraId = Guid.NewGuid();
                 _context.Add(compra);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                ViewData["CompraId"] = new SelectList(_context.Fornecedores, "CompraId", "Nome", compra.FornecedorId);
+                ViewData["ProdutoId"] = new SelectList(_context.Produtos, "ProdutoId", "Nome");
+                List<ItemCompra> itensProdutos = await _context.ItensCompra.Where(i => i.CompraId == compra.CompraId).ToListAsync();
+                ViewData["listaItens"] = itensProdutos;
+                List<Fornecedor> fornecedors = _context.Fornecedores.ToList();
+                ViewData["Fornecedor"] = fornecedors;
+                return RedirectToAction("Create", new { id = compra.CompraId });
             }
-            return View(compra);
+            ViewData["FornecedorId"] = new SelectList(_context.Fornecedores, "FornecedorId", "Nome", compra.FornecedorId);
+            ViewData["ProdutoId"] = new SelectList(_context.Produtos, "ProdutoId", "Nome");
+            List<ItemCompra> itens = await _context.ItensCompra.Where(i => i.CompraId == compra.CompraId).Include(p => p.Produto).ToListAsync();
+            ViewData["listaItens"] = itens;
+            List<Fornecedor> supplier = _context.Fornecedores.ToList();
+            ViewData["Fornecedores"] = supplier;
+            return View("Create", compra);
         }
 
         // GET: Compras/Edit/5
@@ -150,9 +218,86 @@ namespace ProjetoBackend.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteProd(Guid id)
+        {
+            // Busca o item pelo ID
+            var item = await _context.ItensCompra.FindAsync(id);
+
+            if (item == null)
+            {
+                return NotFound(); // Retorna erro 404 se o item não for encontrado
+            }
+
+            // Subtrai o valor do item do total da venda
+            var compra =await _context.Compras.FindAsync(item.CompraId);
+            if (compra!= null)
+            {
+                compra.ValorTotal -= item.ValorTotal;
+                _context.Compras.Update(compra);
+            }
+
+            // Remove o item da venda
+            _context.ItensCompra.Remove(item);
+            await _context.SaveChangesAsync();
+
+            // Redireciona de volta ao método Create com o ID da venda
+            return RedirectToAction("Create", new { id = item.CompraId });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddProduto(Guid CompraId, Guid ProdutoId, int Quantidade)
+        {
+            var produto = await _context.Produtos.FindAsync(ProdutoId); // Busca o produto pelo ID
+
+            if (produto == null)
+            {
+                return NotFound(); // Retorna NotFound se o produto não for encontrado
+            }
+
+            ItemCompra itemCompra = new ItemCompra();
+            itemCompra.CompraId = CompraId;
+            itemCompra.Quantidade = Quantidade;
+            itemCompra.ProdutoId = ProdutoId;
+            itemCompra.ItemCompraId = Guid.NewGuid();
+            itemCompra.ValorUnitario = produto.Preco; // Agora produto não será null
+            itemCompra.ValorTotal = Quantidade * produto.Preco;
+
+            _context.ItensCompra.Add(itemCompra);
+            await _context.SaveChangesAsync();
+
+            var compra = await _context.Compras.FindAsync(CompraId);
+            compra.ValorTotal += itemCompra.ValorTotal;
+
+            _context.Update(compra);
+            await _context.SaveChangesAsync();
+
+            List<ItemCompra> itens = await _context.ItensCompra.Where(i => i.CompraId == CompraId).Include(p => p.Compra).ToListAsync();
+            ViewData["listaItens"] = itens;
+            return RedirectToAction("Create", new { id = CompraId });
+        }
+        public async Task<IActionResult> BuscarFornecedores(string nome)
+        {
+            List<Fornecedor> fornecedors;
+
+            if (string.IsNullOrEmpty(nome))
+            {
+                fornecedors = await _context.Fornecedores.OrderBy(c => c.Nome).ToListAsync();
+            }
+            else
+            {
+                fornecedors = await _context.Fornecedores.Where(c => c.Nome.Contains(nome)).OrderBy(c => c.Nome).ToListAsync();
+            }
+
+            // Retorna apenas o conteúdo da tabela como PartialView
+            return PartialView("_FornecedoresTable", fornecedors);
+        }
         private bool CompraExists(Guid id)
         {
             return _context.Compras.Any(e => e.CompraId == id);
         }
     }
+
 }
