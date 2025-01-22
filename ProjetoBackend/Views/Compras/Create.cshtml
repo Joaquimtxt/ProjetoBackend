@@ -1,43 +1,259 @@
 ﻿@model ProjetoBackend.Models.Compra
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Nova Compra";
+    Compra compraAtual = (Compra)ViewData["compraAtual"];
+    List<ItemCompra> itens = (List<ItemCompra>)ViewData["listaItens"];
+
 }
 
-<h1>Create</h1>
 
-<h4>Compra</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
+<div class="container text-light principal">
+
+    @if (compraAtual == null)
+    {
+        <h5 class="display-5 text-center">Nova Compra</h5>
+        <h5 class="lead text-center">Selecione o fornecedor para iniciar a venda! </h5>
+
+        <form asp-action="Create" method="post" id="formFornecedor">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="FornecedorId" class="control-label"></label>
-                <input asp-for="FornecedorId" class="form-control" />
-                <span asp-validation-for="FornecedorId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DataCompra" class="control-label"></label>
-                <input asp-for="DataCompra" class="form-control" />
-                <span asp-validation-for="DataCompra" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ValorTotal" class="control-label"></label>
-                <input asp-for="ValorTotal" class="form-control" />
-                <span asp-validation-for="ValorTotal" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+
+            <input type="hidden" asp-for="NotaFiscal" class="form-control" />
+
+            <input type="hidden" asp-for="DataCompra" value=@DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss") class="form-control" />
+
+            <input type="hidden" asp-for="ValorTotal" class="form-control" value="0.00" />
+
+
+
+            <div class="row gap-3">
+                <div class="col">
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-adicionar" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        Buscar Fornecedores
+                    </button>
+                </div>
+                <div class="col-9">
+                    <div class="form-group">
+                        <label asp-for="FornecedorId" class="control-label"></label>
+                        <select asp-for="FornecedorId" id="fornecedorId"
+                                class="form-control"
+                                asp-items="ViewBag.FornecedorId"
+                                onchange="this.form.submit()">
+                            @if (compraAtual != null)
+                            {
+                                <option value=@compraAtual.FornecedorId>@compraAtual.Fornecedor.Nome</option>
+                            }
+                            <option selected>Selecione um Fornecedor...</option>
+                        </select>
+                        <span asp-validation-for="FornecedorId" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
         </form>
+    }
+
+
+    @if (compraAtual != null)
+    {
+
+        <div class="row mt-1 mb-2 h-15">
+            <div class="col-3 border border-1 border-light pt-1 px-4">
+                <img class="img-fluid" src="~/img/jaketa-white.png" />
+            </div>
+
+            <div class="col ps-5 border border-1 border-light pt-2">
+                <p class="fs-5 m-0 mb-1">Data: <span class="fw-bold fs-3">@compraAtual.DataCompra</span></p>
+                <p class="fs-5">Cliente: <span class="fw-bold fs-3"> @compraAtual.Fornecedor.Nome </span></p>
+            </div>
+
+            <div class="col-2 border border-1 border-light pt-2">
+                <p class="fs-5 m-0 mb-1 text-center">Venda</p>
+                <p class="text-center"><span class="fw-bold fs-1">@compraAtual.NotaFiscal</span></p>
+            </div>
+
+        </div>
+
+        <!--
+
+        -->
+
+        <div class="row border border-1 border-light p-3 mb-2 h-35 overflow-auto">
+            <div id="produtosVenda" class="">
+                <div class="row ">
+                    <div class="col-12 mb-3 ">
+                        <p class="lead text-center">Incluir Produtos</p>
+                        <div class="formProdutos">
+                            <form asp-action="AddProduto" method="post">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input name="VendaId" type="hidden" class="form-control" value=@compraAtual.CompraId />
+                                <div class="row">
+
+                                    <div class="col-2">
+                                        <div class="form-group">
+                                            <input name="Quantidade" id="Quantidade" placeholder="Quantidade" class="form-control" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <input class="form-control" list="produtoDatalist" id="produtoInput" name="ProdutoId" placeholder="Digite para buscar...">
+                                            <datalist id="produtoDatalist">
+                                                @foreach (var produto in ViewBag.ProdutoId)
+                                                {
+                                                    <option value="@produto.Value">@produto.Text</option>
+                                                }
+                                            </datalist>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-2">
+                                        <div class="form-group">
+                                            <input name="ValorUnitario" id="ValorUnitario" placeholder="R$ Unitário" type="number" step="0.01" class="form-control" readonly />
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="form-group">
+                                            <input name="ValorTotalP" id="ValorTotalP" placeholder="R$ Total" type="number" step="0.01" class="form-control" readonly />
+                                        </div>
+                                    </div>
+                                    <div class="col-1 text-end">
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-adicionar">Adicionar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    @if (itens != null)
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-dark">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <span>Venda</span>
+                                        </th>
+                                        <th>
+                                            <span>Produto</span>
+                                        </th>
+                                        <th>
+                                            <span>Quantidade</span>
+                                        </th>
+                                        <th>
+                                            <span>Valor Unitario</span>
+                                        </th>
+                                        <th>
+                                            <span>Valor Total</span>
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in itens)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Compra.NotaFiscal)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Produto.Nome)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Quantidade)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.ValorUnitario)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.ValorTotal)
+                                            </td>
+                                            <td>
+                                                <form asp-action="DeleteProd" asp-route-id="@item.ItemCompraId" method="post" style="display:inline;">
+                                                    <button type="submit" class="btn btn-outline-danger">
+                                                        <ion-icon name="trash-bin-outline"></ion-icon>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+      
+        <div id="totalVenda">
+            <div class="row border border-1 border-light p-0 h-10">
+                <div class="col-6 pt-3">
+                    <p class="fs-4">
+                        Total da Compra:
+                        <span class="fw-bold">@String.Format(new System.Globalization.CultureInfo("pt-BR"), "{0:C}", compraAtual.ValorTotal)</span>
+                    </p>
+                </div>
+                <div class="col pt-3">
+                    <button type="button" onclick="imprimirVenda('@compraAtual.CompraId')" class="btn btn-outline-light w-100">Imprimir</button>
+
+                
+
+                </div>
+                <div class="col pt-3">
+                    <a asp-action="Index" class="btn btn-primary w-100">Finalizar Venda</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+
+
+<!-- Modal para Seleção de Fornecedor -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="fornecedorModalLabel">Selecionar Fornecedor</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="search-container">
+                    <form id="form-busca-fornecedor" class="d-flex">
+                        <input class="search-input" type="text" name="nome" id="nome" placeholder="Procurar..." />
+                        <button type="button" id="btn-buscar-fornecedor" class="btn search-button">
+                            <ion-icon name="search"></ion-icon>
+                        </button>
+                    </form>
+                </div>
+
+                <table class="table table-hover" id="fornecedorTable">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="fornecedorTableBody">
+                        <!-- Inicialmente vazio, preenchido via AJAX -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+
+    }
+
+
 }

@@ -169,6 +169,27 @@
         });
 
     });
+        $(document).ready(function () {
+
+        $("#produtoInput").change(function () {
+            var id = $(this).val();
+            var quantidade = $("#Quantidade").val();
+
+            $.ajax({
+                url: '/ItensCompras/PrecoProduto',
+                data: { id: id },
+                dataType: 'json',
+                success: function (data) {
+                    $("#ValorUnitario").val(data);
+                    var total = parseFloat(data * quantidade);
+                    $("#ValorTotalP").val(total);
+                },
+                error: function () {
+                    alert("Erro ao calcular o preço do produto.");
+                }
+            });
+        });
+    });
 
 
 

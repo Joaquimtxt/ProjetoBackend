@@ -69,7 +69,7 @@ namespace ProjetoBackend.Controllers
                         itemCompra.ValorTotal = itemCompra.Quantidade * itemCompra.ValorUnitario;
                     }
                 }
-                // Atribui um novo ID para o item de venda
+                // Atribui um novo ID para o item de compra
                 itemCompra.ItemCompraId = Guid.NewGuid();
                 _context.Add(itemCompra);
                 await _context.SaveChangesAsync();
