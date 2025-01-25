@@ -81,7 +81,7 @@ namespace ProjetoBackend.Controllers
 
             Compra compraAtual = _context.Compras.Where(v => v.CompraId == id).Include(c => c.Fornecedor).FirstOrDefaultAsync().Result;
             ViewData["compraAtual"] = compraAtual;
-            ViewData["FornecedorId"] = new SelectList(_context.Fornecedores, "ClienteId", "Nome");
+            ViewData["FornecedorId"] = new SelectList(_context.Fornecedores, "FornecedorId", "Nome");
             ViewData["ProdutoId"] = new SelectList(_context.Produtos, "ProdutoId", "Nome");
             List<ItemCompra> itens = null;
             if (compraAtual != null)
@@ -105,7 +105,7 @@ namespace ProjetoBackend.Controllers
             if (ModelState.IsValid)
             {
                 // Auto incremento da nota fiscal
-                compra.NotaFiscal = _context.Vendas.Count() + 1;
+                compra.NotaFiscal = _context.Compras.Count() + 1;
                 compra.DataCompra = DateTime.Now;
                 compra.CompraId = Guid.NewGuid();
                 _context.Add(compra);

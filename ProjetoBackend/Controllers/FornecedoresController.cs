@@ -132,7 +132,7 @@ namespace ProjetoBackend.Controllers
         }
 
         // GET: Fornecedores/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
             {
@@ -164,7 +164,7 @@ namespace ProjetoBackend.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool FornecedorExists(int id)
+        private bool FornecedorExists(Guid? id)
         {
             return _context.Fornecedores.Any(e => e.FornecedorId == id);
         }

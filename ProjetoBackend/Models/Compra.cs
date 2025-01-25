@@ -7,10 +7,10 @@ namespace ProjetoBackend.Models
     {
         public Guid CompraId { get; set; }
 
-        public int? NotaFiscal { get; set; } = 0;
+        public int NotaFiscal { get; set; } = 0;
 
         [Required(ErrorMessage = "É necessário informar o Fornecedor")]
-        [Display(Name = "Cliente")]
+        [Display(Name = "Fornecedor")]
         public Guid FornecedorId { get; set; }
         public Fornecedor? Fornecedor { get; set; }
 
