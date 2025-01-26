@@ -12,8 +12,8 @@ using ProjetoBackend.Data;
 namespace ProjetoBackend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250125030312_CorrecaoCompras")]
-    partial class CorrecaoCompras
+    [Migration("20250126034830_Vaidarcerto")]
+    partial class Vaidarcerto
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -305,7 +305,7 @@ namespace ProjetoBackend.Migrations
                     b.Property<Guid>("FornecedorId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("NotaFiscal")
+                    b.Property<int>("NotaFiscal")
                         .HasColumnType("int");
 
                     b.Property<decimal?>("ValorTotal")

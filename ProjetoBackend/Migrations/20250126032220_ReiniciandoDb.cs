@@ -5,7 +5,7 @@
 namespace ProjetoBackend.Migrations
 {
     /// <inheritdoc />
-    public partial class ServicoVendaDenovo : Migration
+    public partial class ReiniciandoDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

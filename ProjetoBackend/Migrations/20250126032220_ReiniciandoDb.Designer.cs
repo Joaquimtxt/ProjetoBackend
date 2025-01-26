@@ -12,8 +12,8 @@ using ProjetoBackend.Data;
 namespace ProjetoBackend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241210133823_AlteracaoVendaseServicos")]
-    partial class AlteracaoVendaseServicos
+    [Migration("20250126032220_ReiniciandoDb")]
+    partial class ReiniciandoDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -305,26 +305,24 @@ namespace ProjetoBackend.Migrations
                     b.Property<Guid>("FornecedorId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("FornecedorId1")
+                    b.Property<int>("NotaFiscal")
                         .HasColumnType("int");
 
-                    b.Property<double?>("ValorTotal")
-                        .HasColumnType("float");
+                    b.Property<decimal?>("ValorTotal")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("CompraId");
 
-                    b.HasIndex("FornecedorId1");
+                    b.HasIndex("FornecedorId");
 
                     b.ToTable("Compras", (string)null);
                 });
 
             modelBuilder.Entity("ProjetoBackend.Models.Fornecedor", b =>
                 {
-                    b.Property<int>("FornecedorId")
+                    b.Property<Guid>("FornecedorId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FornecedorId"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Celular")
                         .IsRequired()
@@ -356,11 +354,17 @@ namespace ProjetoBackend.Migrations
                     b.Property<Guid>("CompraId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ProdutoId")
+                    b.Property<Guid?>("ProdutoId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<double>("Quantidade")
-                        .HasColumnType("float");
+                    b.Property<int>("Quantidade")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("ValorTotal")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ValorUnitario")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("ItemCompraId");
 
@@ -467,7 +471,6 @@ namespace ProjetoBackend.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Observacao")
-                        .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
@@ -576,7 +579,9 @@ namespace ProjetoBackend.Migrations
                 {
                     b.HasOne("ProjetoBackend.Models.Fornecedor", "Fornecedor")
                         .WithMany()
-                        .HasForeignKey("FornecedorId1");
+                        .HasForeignKey("FornecedorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Fornecedor");
                 });
@@ -584,16 +589,14 @@ namespace ProjetoBackend.Migrations
             modelBuilder.Entity("ProjetoBackend.Models.ItemCompra", b =>
                 {
                     b.HasOne("ProjetoBackend.Models.Compra", "Compra")
-                        .WithMany()
+                        .WithMany("ItensCompra")
                         .HasForeignKey("CompraId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ProjetoBackend.Models.Produto", "Produto")
                         .WithMany()
-                        .HasForeignKey("ProdutoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProdutoId");
 
                     b.Navigation("Compra");
 
@@ -670,6 +673,11 @@ namespace ProjetoBackend.Migrations
                         .IsRequired();
 
                     b.Navigation("Cliente");
+                });
+
+            modelBuilder.Entity("ProjetoBackend.Models.Compra", b =>
+                {
+                    b.Navigation("ItensCompra");
                 });
 
             modelBuilder.Entity("ProjetoBackend.Models.Venda", b =>
