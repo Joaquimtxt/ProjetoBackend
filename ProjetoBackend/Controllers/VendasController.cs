@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProjetoBackend.Data;
-using ProjetoBackend.Migrations;
 using ProjetoBackend.Models;
 using Rotativa.AspNetCore;
 

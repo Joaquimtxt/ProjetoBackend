@@ -26,7 +26,7 @@ body {
 .custom-icon {
     width: 43px; /* Ajuste o tamanho conforme necessário */
     height: 36px;
-    transition: transform 0.3s ease;
+    transition: transform 30ms ease;
 }
 
     .custom-icon:hover {
