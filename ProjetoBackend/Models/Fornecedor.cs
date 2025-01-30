@@ -14,6 +14,7 @@ namespace ProjetoBackend.Models
         public string Email { get; set; }
         [Required(ErrorMessage = "O Campo Nome da Celular é Obrigatório!")]
         public string Celular { get; set; }
+        [Required(ErrorMessage = "O Campo CNPJ/CPF é Obrigatório!")]
         [Display(Name = "CNPJ/CPF")]
         public string CnpjCpf { get; set; }
     }
