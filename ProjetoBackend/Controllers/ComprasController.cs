@@ -115,8 +115,8 @@ namespace ProjetoBackend.Controllers
                 ViewData["ProdutoId"] = new SelectList(_context.Produtos, "ProdutoId", "Nome");
                 List<ItemCompra> itensProdutos = await _context.ItensCompra.Where(i => i.CompraId == compra.CompraId).ToListAsync();
                 ViewData["listaItens"] = itensProdutos;
-                List<Fornecedor> fornecedors = _context.Fornecedores.ToList();
-                ViewData["Fornecedor"] = fornecedors;
+                List<Fornecedor> fornecedores = _context.Fornecedores.ToList();
+                ViewData["Fornecedor"] = fornecedores;
                 return RedirectToAction("Create", new { id = compra.CompraId });
             }
             ViewData["FornecedorId"] = new SelectList(_context.Fornecedores, "FornecedorId", "Nome", compra.FornecedorId);
@@ -274,19 +274,19 @@ namespace ProjetoBackend.Controllers
         }
         public async Task<IActionResult> BuscarFornecedores(string nome)
         {
-            List<Fornecedor> fornecedors;
+            List<Fornecedor> fornecedores;
 
             if (string.IsNullOrEmpty(nome))
             {
-                fornecedors = await _context.Fornecedores.OrderBy(c => c.Nome).ToListAsync();
+                fornecedores = await _context.Fornecedores.OrderBy(c => c.Nome).ToListAsync();
             }
             else
             {
-                fornecedors = await _context.Fornecedores.Where(c => c.Nome.Contains(nome)).OrderBy(c => c.Nome).ToListAsync();
+                fornecedores = await _context.Fornecedores.Where(c => c.Nome.Contains(nome)).OrderBy(c => c.Nome).ToListAsync();
             }
 
             // Retorna apenas o conteúdo da tabela como PartialView
-            return PartialView("_FornecedoresTable", fornecedors);
+            return PartialView("_FornecedoresTable", fornecedores);
         }
         private bool CompraExists(Guid id)
         {

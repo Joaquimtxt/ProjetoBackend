@@ -4,9 +4,7 @@
     ViewData["Title"] = "Nova Compra";
     Compra compraAtual = (Compra)ViewData["compraAtual"];
     List<ItemCompra> itens = (List<ItemCompra>)ViewData["listaItens"];
-
 }
-
 
 <div class="container text-light principal">
 
@@ -189,7 +187,7 @@
             </div>
         </div>
 
-      
+
         <div id="totalVenda">
             <div class="row border border-1 border-light p-0 h-10">
                 <div class="col-6 pt-3">
@@ -201,7 +199,7 @@
                 <div class="col pt-3">
                     <button type="button" onclick="imprimirVenda('@compraAtual.CompraId')" class="btn btn-outline-light w-100">Imprimir</button>
 
-                
+
 
                 </div>
                 <div class="col pt-3">
