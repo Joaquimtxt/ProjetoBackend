@@ -77,14 +77,14 @@
         -->
 
         <div class="row border border-1 border-light p-3 mb-2 h-35 overflow-auto">
-            <div id="produtosVenda" class="">
+            <div id="produtosCompra" class="">
                 <div class="row ">
                     <div class="col-12 mb-3 ">
                         <p class="lead text-center">Incluir Produtos</p>
                         <div class="formProdutos">
                             <form asp-action="AddProduto" method="post">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                <input name="VendaId" type="hidden" class="form-control" value=@compraAtual.CompraId />
+                                <input name="CompraId" type="hidden" class="form-control" value=@compraAtual.CompraId />
                                 <div class="row">
 
                                     <div class="col-2">
@@ -134,7 +134,7 @@
                                 <thead>
                                     <tr>
                                         <th>
-                                            <span>Venda</span>
+                                            <span>Compra</span>
                                         </th>
                                         <th>
                                             <span>Produto</span>
