@@ -16,7 +16,7 @@
         <form asp-action="Create" method="post" id="formFornecedor">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <input type="hidden" asp-for="NotaFiscal" class="form-control" />
+            <input type="hidden" asp-for="NotaFiscal" value="0" class="form-control" />
 
             <input type="hidden" asp-for="DataCompra" value=@DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss") class="form-control" />
 

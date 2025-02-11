@@ -37,7 +37,7 @@ namespace ProjetoBackend.Controllers
             // Normaliza o termo de pesquisa (removendo acentos e ignorando letras maiúsculas/minúsculas)
             var nomeNormalizado = searchString.RemoverAcentos().ToLower();
 
-            // Carrega as compras do banco de dados, incluindo o cliente
+            // Carrega as compras do banco de dados, incluindo o Fornecedor
             var compras = await _context.Compras
                 .Include(v => v.Fornecedor)
                 .ToListAsync();
@@ -111,6 +111,7 @@ namespace ProjetoBackend.Controllers
                 ViewData["listaItens"] = itensProdutos;
                 List<Fornecedor> fornecedores = _context.Fornecedores.ToList();
                 ViewData["Fornecedor"] = fornecedores;
+                ViewData["compraAtual"] = compra.CompraId;
                 return RedirectToAction("Create", new { id = compra.CompraId });
             }
             ViewData["FornecedorId"] = new SelectList(_context.Fornecedores, "FornecedorId", "Nome", compra.FornecedorId);
