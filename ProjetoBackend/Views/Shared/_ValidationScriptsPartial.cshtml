@@ -3,7 +3,6 @@
 
 <script>
     $(document).ready(function () {
-
         $("#produtoId").change(function () {
             var id = $(this).val();
             var quantidade = $("#Quantidade").val();
@@ -23,7 +22,8 @@
             });
         });
     });
-      $(document).ready(function () {
+
+    $(document).ready(function () {
         $("#servicoId").change(function () {
             var id = $(this).val();
             var quantidade = $("#QuantidadeS").val();
@@ -57,7 +57,6 @@
         input.value = valor;
     }
 
-
     function formatarCpfCnpj(input) {
         // Remove todos os caracteres que não sejam números
         let valor = input.value.replace(/\D/g, '');
@@ -85,16 +84,6 @@
         input.value = valor;
     }
 
-
-    // function selecionarCliente(id, nome) {
-
-    //     alert(id);
-    //     alert(nome);
-    //     document.getElementById('clienteId').value = id;
-    //     document.getElementById('clienteNome').value = nome;
-    //     new bootstrap.Modal(document.getElementById('clienteModal')).hide();
-    // }
-
     function selecionarCliente(id) {
         // Define o valor no campo de input
         document.getElementById('clienteId').value = id;
@@ -109,8 +98,6 @@
         var form = document.getElementById('formCliente');
         form.submit();
     }
-
-
 
     $(document).ready(function () {
         // Evento de busca
@@ -130,9 +117,9 @@
                 }
             });
         });
-
     });
-     function selecionarFornecedor(id) {
+
+    function selecionarFornecedor(id) {
         // Define o valor no campo de input
         document.getElementById('fornecedorId').value = id;
 
@@ -146,8 +133,6 @@
         var form = document.getElementById('formFornecedor');
         form.submit();
     }
-
-
 
     $(document).ready(function () {
         // Evento de busca
@@ -163,14 +148,13 @@
                     $('#fornecedorTableBody').html(data);
                 },
                 error: function () {
-                    alert('Erro ao buscar clientes.');
+                    alert('Erro ao buscar fornecedores.');
                 }
             });
         });
-
     });
-        $(document).ready(function () {
 
+    $(document).ready(function () {
         $("#produtoInput").change(function () {
             var id = $(this).val();
             var quantidade = $("#Quantidade").val();
@@ -190,10 +174,4 @@
             });
         });
     });
-
-
-
-
-
-
 </script>

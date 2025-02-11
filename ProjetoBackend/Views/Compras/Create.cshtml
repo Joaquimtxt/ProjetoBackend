@@ -11,7 +11,7 @@
     @if (compraAtual == null)
     {
         <h5 class="display-5 text-center">Nova Compra</h5>
-        <h5 class="lead text-center">Selecione o fornecedor para iniciar a venda! </h5>
+        <h5 class="lead text-center">Selecione o fornecedor para iniciar a compra! </h5>
 
         <form asp-action="Create" method="post" id="formFornecedor">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -21,8 +21,6 @@
             <input type="hidden" asp-for="DataCompra" value=@DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss") class="form-control" />
 
             <input type="hidden" asp-for="ValorTotal" class="form-control" value="0.00" />
-
-
 
             <div class="row gap-3">
                 <div class="col">
@@ -51,10 +49,8 @@
         </form>
     }
 
-
     @if (compraAtual != null)
     {
-
         <div class="row mt-1 mb-2 h-15">
             <div class="col-3 border border-1 border-light pt-1 px-4">
                 <img class="img-fluid" src="~/img/jaketa-white.png" />
@@ -62,37 +58,30 @@
 
             <div class="col ps-5 border border-1 border-light pt-2">
                 <p class="fs-5 m-0 mb-1">Data: <span class="fw-bold fs-3">@compraAtual.DataCompra</span></p>
-                <p class="fs-5">Cliente: <span class="fw-bold fs-3"> @compraAtual.Fornecedor.Nome </span></p>
+                <p class="fs-5">Fornecedor: <span class="fw-bold fs-3"> @compraAtual.Fornecedor.Nome </span></p>
             </div>
 
             <div class="col-2 border border-1 border-light pt-2">
-                <p class="fs-5 m-0 mb-1 text-center">Venda</p>
+                <p class="fs-5 m-0 mb-1 text-center">Compra</p>
                 <p class="text-center"><span class="fw-bold fs-1">@compraAtual.NotaFiscal</span></p>
             </div>
-
         </div>
 
-        <!--
-
-        -->
-
         <div class="row border border-1 border-light p-3 mb-2 h-35 overflow-auto">
-            <div id="produtosVenda" class="">
+            <div id="produtosCompra" class="">
                 <div class="row ">
                     <div class="col-12 mb-3 ">
                         <p class="lead text-center">Incluir Produtos</p>
                         <div class="formProdutos">
                             <form asp-action="AddProduto" method="post">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                <input name="VendaId" type="hidden" class="form-control" value=@compraAtual.CompraId />
+                                <input name="CompraId" type="hidden" class="form-control" value=@compraAtual.CompraId />
                                 <div class="row">
-
                                     <div class="col-2">
                                         <div class="form-group">
                                             <input name="Quantidade" id="Quantidade" placeholder="Quantidade" class="form-control" />
                                         </div>
                                     </div>
-
                                     <div class="col">
                                         <div class="form-group">
                                             <input class="form-control" list="produtoDatalist" id="produtoInput" name="ProdutoId" placeholder="Digite para buscar...">
@@ -102,10 +91,8 @@
                                                     <option value="@produto.Value">@produto.Text</option>
                                                 }
                                             </datalist>
-
                                         </div>
                                     </div>
-
                                     <div class="col-2">
                                         <div class="form-group">
                                             <input name="ValorUnitario" id="ValorUnitario" placeholder="R$ Unitário" type="number" step="0.01" class="form-control" readonly />
@@ -134,7 +121,7 @@
                                 <thead>
                                     <tr>
                                         <th>
-                                            <span>Venda</span>
+                                            <span>Compra</span>
                                         </th>
                                         <th>
                                             <span>Produto</span>
@@ -187,8 +174,7 @@
             </div>
         </div>
 
-
-        <div id="totalVenda">
+        <div id="totalCompra">
             <div class="row border border-1 border-light p-0 h-10">
                 <div class="col-6 pt-3">
                     <p class="fs-4">
@@ -197,21 +183,15 @@
                     </p>
                 </div>
                 <div class="col pt-3">
-                    <button type="button" onclick="imprimirVenda('@compraAtual.CompraId')" class="btn btn-outline-light w-100">Imprimir</button>
-
-
-
+                    <button type="button" onclick="imprimirCompra('@compraAtual.CompraId')" class="btn btn-outline-light w-100">Imprimir</button>
                 </div>
                 <div class="col pt-3">
-                    <a asp-action="Index" class="btn btn-primary w-100">Finalizar Venda</a>
+                    <a asp-action="Index" class="btn btn-primary w-100">Finalizar Compra</a>
                 </div>
             </div>
         </div>
     }
 </div>
-
-
-
 
 <!-- Modal para Seleção de Fornecedor -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -247,11 +227,19 @@
         </div>
     </div>
 </div>
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
-
     }
-
-
+    <script>
+        function imprimirCompra(id) {
+            var url = '/Compras/ImprimirCompra/' + id;
+            var novaJanela = window.open(
+                url,
+                '_blank',
+                'toolbar=no,scrollbars=yes,resizable=yes,top=100,left=100,width=1024,height=800'
+            );
+        }
+    </script>
 }

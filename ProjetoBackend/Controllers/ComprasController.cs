@@ -73,12 +73,9 @@ namespace ProjetoBackend.Controllers
             return View(compra);
         }
 
-        // POST: Compras/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // GET: Compras/Create
         public IActionResult Create(Guid? id)
         {
-
             Compra compraAtual = _context.Compras.Where(v => v.CompraId == id).Include(c => c.Fornecedor).FirstOrDefaultAsync().Result;
             ViewData["compraAtual"] = compraAtual;
             ViewData["FornecedorId"] = new SelectList(_context.Fornecedores, "FornecedorId", "Nome");
@@ -89,15 +86,12 @@ namespace ProjetoBackend.Controllers
                 itens = _context.ItensCompra.Where(i => i.CompraId == compraAtual.CompraId).Include(p => p.Produto).ToList();
             }
             ViewData["listaItens"] = itens;
-       
             List<Fornecedor> supplier = _context.Fornecedores.ToList();
             ViewData["Fornecedor"] = supplier;
             return View();
         }
 
         // POST: Compras/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CompraId,NotaFiscal,FornecedorId,DataCompra,ValorTotal")] Compra compra)
@@ -111,7 +105,7 @@ namespace ProjetoBackend.Controllers
                 _context.Add(compra);
                 await _context.SaveChangesAsync();
 
-                ViewData["CompraId"] = new SelectList(_context.Fornecedores, "CompraId", "Nome", compra.FornecedorId);
+                ViewData["FornecedorId"] = new SelectList(_context.Fornecedores, "FornecedorId", "Nome", compra.FornecedorId);
                 ViewData["ProdutoId"] = new SelectList(_context.Produtos, "ProdutoId", "Nome");
                 List<ItemCompra> itensProdutos = await _context.ItensCompra.Where(i => i.CompraId == compra.CompraId).ToListAsync();
                 ViewData["listaItens"] = itensProdutos;
@@ -141,15 +135,14 @@ namespace ProjetoBackend.Controllers
             {
                 return NotFound();
             }
+            ViewData["FornecedorId"] = new SelectList(_context.Fornecedores, "FornecedorId", "Nome", compra.FornecedorId);
             return View(compra);
         }
 
         // POST: Compras/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("CompraId,FornecedorId,DataCompra,ValorTotal")] Compra compra)
+        public async Task<IActionResult> Edit(Guid id, [Bind("CompraId,NotaFiscal,FornecedorId,DataCompra,ValorTotal")] Compra compra)
         {
             if (id != compra.CompraId)
             {
@@ -176,6 +169,7 @@ namespace ProjetoBackend.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["FornecedorId"] = new SelectList(_context.Fornecedores, "FornecedorId", "Nome", compra.FornecedorId);
             return View(compra);
         }
 
@@ -225,8 +219,8 @@ namespace ProjetoBackend.Controllers
             }
 
             // Subtrai o valor do item do total da venda
-            var compra =await _context.Compras.FindAsync(item.CompraId);
-            if (compra!= null)
+            var compra = await _context.Compras.FindAsync(item.CompraId);
+            if (compra != null)
             {
                 compra.ValorTotal -= item.ValorTotal;
                 _context.Compras.Update(compra);
@@ -272,6 +266,7 @@ namespace ProjetoBackend.Controllers
             ViewData["listaItens"] = itens;
             return RedirectToAction("Create", new { id = CompraId });
         }
+
         public async Task<IActionResult> BuscarFornecedores(string nome)
         {
             List<Fornecedor> fornecedores;
@@ -288,10 +283,10 @@ namespace ProjetoBackend.Controllers
             // Retorna apenas o conteúdo da tabela como PartialView
             return PartialView("_FornecedoresTable", fornecedores);
         }
+
         private bool CompraExists(Guid id)
         {
             return _context.Compras.Any(e => e.CompraId == id);
         }
     }
-
 }
