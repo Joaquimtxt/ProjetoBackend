@@ -75,12 +75,12 @@ namespace ProjetoBackend.Controllers
                 await _context.SaveChangesAsync();
 
                 // Atualiza o valor total da venda
-                var venda = await _context.Vendas.FindAsync(itemCompra.CompraId);
-                venda.ValorTotal = await _context.ItensCompra
+                var compra = await _context.Vendas.FindAsync(itemCompra.CompraId);
+                compra.ValorTotal = await _context.ItensCompra
                     .Where(i => i.CompraId == itemCompra.CompraId)
                     .SumAsync(i => i.ValorTotal);
 
-                _context.Update(venda);
+                _context.Update(compra);
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index), new { id = itemCompra.CompraId });
@@ -182,7 +182,7 @@ namespace ProjetoBackend.Controllers
         {
             return _context.ItensCompra.Any(e => e.ItemCompraId == id);
         }
-      public decimal PrecoProduto(Guid id)
+        public decimal PrecoProduto(Guid id)
         {
             var produto = _context.Produtos.Where(p => p.ProdutoId == id).FirstOrDefault();
             return produto.Preco;
