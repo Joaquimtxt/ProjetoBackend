@@ -183,7 +183,7 @@
                     </p>
                 </div>
                 <div class="col pt-3">
-                    <button type="button" onclick="imprimirCompra('@compraAtual.CompraId')" class="btn btn-outline-light w-100">Imprimir</button>
+                    <a asp-action="CopiarTabela" asp-route-id="@compraAtual.CompraId" target="_blank" class="btn  btn-outline-light w-100">Copiar para Excel</a>
                 </div>
                 <div class="col pt-3">
                     <a asp-action="Index" class="btn btn-primary w-100">Finalizar Compra</a>
@@ -227,19 +227,3 @@
         </div>
     </div>
 </div>
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-    <script>
-        function imprimirCompra(id) {
-            var url = '/Compras/ImprimirCompra/' + id;
-            var novaJanela = window.open(
-                url,
-                '_blank',
-                'toolbar=no,scrollbars=yes,resizable=yes,top=100,left=100,width=1024,height=800'
-            );
-        }
-    </script>
-}

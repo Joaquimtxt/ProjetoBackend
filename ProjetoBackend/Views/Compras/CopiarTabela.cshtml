@@ -1,0 +1,108 @@
+﻿@model ProjetoBackend.Models.Compra
+
+@{
+    Layout = null; // Remove o layout padrão para copiar
+    Compra compraAtual = (Compra)ViewData["compraAtual"];
+    List<ItemCompra> itens = (List<ItemCompra>)ViewData["listaItens"];
+}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impressão de Compra</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            width: 21cm;
+            height: 29.7cm;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid black;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+            .header img {
+                max-height: 80px;
+            }
+
+        .details {
+            margin-bottom: 20px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+            .table th, .table td {
+                border: 1px solid black;
+                padding: 8px;
+                text-align: left;
+            }
+
+            .table th {
+                background-color: #f2f2f2;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="~/img/jaketa-dark.png" alt="Logo">
+            <div>
+                <p><strong>Data:</strong> @compraAtual.DataCompra</p>
+                <p><strong>Nota Fiscal:</strong> @compraAtual.NotaFiscal</p>
+            </div>
+        </div>
+
+        <div class="details">
+            <p><strong>Fornecedor:</strong> @compraAtual.Fornecedor.Nome</p>
+            <p><strong>Contato:</strong> @compraAtual.Fornecedor.Celular</p>
+        </div>
+        <table class="table table-bordered" id="tabelaCompra">
+            <thead>
+                <tr>
+                    <th>Fornecedor</th>
+                    <th>Data da compra</th>
+                    <th>Valor Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                    <tr>
+                        <td>@compraAtual.Fornecedor.Nome</td>
+                    <td>@compraAtual.DataCompra?.ToString("dd/MM/yyyy")</td>
+                    <td>@String.Format("{0:C}", compraAtual.ValorTotal)</td>
+                    </tr>
+                
+            </tbody>
+        </table>
+        <button class="btn btn-primary" onclick="copiarTabela()">Copiar Tabela</button>
+    </div>
+
+    <script>
+        function copiarTabela() {
+            var tabela = document.getElementById("tabelaCompra");
+            var range = document.createRange();
+            range.selectNode(tabela);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            document.execCommand("copy");
+            window.getSelection().removeAllRanges();
+            alert("Tabela copiada para a área de transferência!");
+        }
+    </script>
+</body>
+</html>

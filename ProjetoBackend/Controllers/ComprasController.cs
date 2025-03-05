@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProjetoBackend.Data;
@@ -183,6 +184,7 @@ namespace ProjetoBackend.Controllers
             }
 
             var compra = await _context.Compras
+                .Include(c => c.Fornecedor) // Inclua a propriedade Fornecedor
                 .FirstOrDefaultAsync(m => m.CompraId == id);
             if (compra == null)
             {
@@ -288,6 +290,24 @@ namespace ProjetoBackend.Controllers
         private bool CompraExists(Guid id)
         {
             return _context.Compras.Any(e => e.CompraId == id);
+        }
+        public async Task<IActionResult> CopiarTabela(Guid id)
+        {
+            var compra = await _context.Compras
+                .Include(c => c.Fornecedor)
+                .Include(c => c.ItensCompra)
+                    .ThenInclude(ic => ic.Produto)
+                .FirstOrDefaultAsync(c => c.CompraId == id);
+
+            if (compra == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["compraAtual"] = compra;
+            ViewData["listaItens"] = compra.ItensCompra.ToList();
+
+            return View(compra);
         }
     }
 }
